@@ -1,3 +1,10 @@
+import Navbar from "@/components/Navbar";
+
 export default function Home() {
-  return <h1 className="text-black">Hello</h1>;
+  return (
+    <div>
+      <Navbar />
+      <h1 className="text-black">InteliMaker</h1>
+    </div>
+  );
 }

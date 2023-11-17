@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import colors from "tailwindcss/colors";
 
 const config: Config = {
   content: [
@@ -16,6 +17,10 @@ const config: Config = {
       minWidth: {
         "1/2": "50%",
         "1/4": "25%",
+      },
+      colors: {
+        primary: "#51a68d",
+        secondary: colors.white,
       },
     },
   },
