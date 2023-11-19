@@ -43,7 +43,7 @@ export default function SignUp() {
       >
         <div className="flex flex-col justify-between mb-6">
           <label htmlFor="email" className="py-2">
-            Email
+            Seu Email
           </label>
           <input
             type="email"
@@ -126,7 +126,7 @@ export default function SignUp() {
           Criar Conta
         </button>
 
-        <Link href="/signin" className="mt-6 text-center">
+        <Link href="/login" className="mt-6 text-center">
           Já possui conta?
         </Link>
       </form>

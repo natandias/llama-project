@@ -9,7 +9,7 @@ type FormData = {
   password: string;
 };
 
-export default function SignIn() {
+export default function Login() {
   const {
     watch,
     register,
