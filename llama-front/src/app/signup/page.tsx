@@ -3,6 +3,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import { getAccessToken } from "@auth0/nextjs-auth0";
+import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 
 type FormData = {
   email: string;
@@ -10,7 +13,7 @@ type FormData = {
   confirmPassword: string;
 };
 
-export default function SignUp() {
+export default withPageAuthRequired(function SignUp() {
   const {
     watch,
     register,
@@ -33,9 +36,20 @@ export default function SignUp() {
     console.log("submit", values);
   };
 
+  const test = async () => {
+    const r = await fetch("/api/user/list");
+    const t = await r.json();
+    console.log("result test auth", t);
+  };
+
   return (
     <section className="flex flex-col my-auto min-w-1/4">
       <h1 className="text-3xl uppercase mb-10">Crie sua conta</h1>
+
+      <a href="/api/auth/logout">Logout</a>
+      <button type="button" onClick={test}>
+        Test API auth
+      </button>
 
       <form
         className="flex flex-col justify-between mb-4"
@@ -132,4 +146,4 @@ export default function SignUp() {
       </form>
     </section>
   );
-}
+});

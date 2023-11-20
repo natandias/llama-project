@@ -18,6 +18,9 @@ const config: Config = {
         "1/2": "50%",
         "1/4": "25%",
       },
+      maxWidth: {
+        "screen-limit": "1280px",
+      },
       colors: {
         primary: "#51a68d",
         secondary: colors.white,

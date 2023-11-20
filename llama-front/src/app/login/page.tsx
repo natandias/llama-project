@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import Link from "next/link";
 
@@ -19,6 +20,13 @@ export default function Login() {
   } = useForm<FormData>();
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const { user, error, isLoading } = useUser();
+
+  console.log("user", user);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>{error.message}</div>;
 
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);

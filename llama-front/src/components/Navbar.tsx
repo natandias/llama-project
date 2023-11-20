@@ -6,9 +6,15 @@ import { Fragment, useState } from "react";
 const MenuItems = () => {
   return (
     <Fragment>
-      <h1>Produto</h1>
-      <h1>Funcionalidades</h1>
-      <h1>Quem somos</h1>
+      <div className="flex flex-row gap-10 ml-auto">
+        <h1>Produto</h1>
+        <h1>Funcionalidades</h1>
+        <h1>Quem somos</h1>
+      </div>
+
+      <button className="ml-auto mr-4 bg-primary text-white p-3 px-8 rounded-md">
+        <a href="/api/auth/login">Log in</a>
+      </button>
     </Fragment>
   );
 };
@@ -19,15 +25,15 @@ export default function Navbar() {
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   return (
-    <nav className="flex flex-row bg-white w-screen m-0 mb-10">
-      <Image
-        alt="Intelimaker Logo"
-        src="/android-chrome-192x192.png"
-        width={70}
-        height={70}
-      />
-
-      <div className="hidden md:flex flex-row w-full justify-center md:gap-40 items-center">
+    <nav className="flex flex-row bg-white w-screen m-0 mb-10 h-20">
+      <div className="hidden md:flex flex-row w-full justify-center items-center m-auto">
+        <Image
+          alt="Intelimaker Logo"
+          src="/android-chrome-192x192.png"
+          className="ml-4"
+          width={70}
+          height={70}
+        />
         <MenuItems />
       </div>
 
