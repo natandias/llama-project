@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss'
 import colors from "tailwindcss/colors";
+import defaultTheme from "tailwindcss/defaultTheme";
 
 const config: Config = {
   content: [
@@ -22,8 +23,12 @@ const config: Config = {
         "screen-limit": "1280px",
       },
       colors: {
-        primary: "#51a68d",
+        primary: "#67d2b3",
+        primary_hover: "#29ce92",
         secondary: colors.white,
+      },
+      fontFamily: {
+        sans: ['"Poppins"', ...defaultTheme.fontFamily.sans],
       },
     },
   },
