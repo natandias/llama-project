@@ -1,5 +1,5 @@
 "use client";
-import Navbar from "@/components/dashboard/Navbar.1";
+import Navbar from "@/components/dashboard/Navbar";
 import Sidebar from "@/components/dashboard/Sidebar";
 import { useState } from "react";
 
