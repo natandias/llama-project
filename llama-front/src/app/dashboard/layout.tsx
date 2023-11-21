@@ -18,7 +18,7 @@ export default function DashboardLayout({
       <div className="flex flex-row w-full">
         <Sidebar isOpen={isSidebarOpen} />
         <div
-          className={`pl-5 ${
+          className={`w-full h-full md:pl-5 pt-10 ${
             isSidebarOpen ? "invisible md:visible" : "visible md:visible"
           }`}
         >
