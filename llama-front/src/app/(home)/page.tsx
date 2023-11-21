@@ -1,4 +1,3 @@
-import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { Fragment } from "react";
 
@@ -16,7 +15,6 @@ const Card = ({ title, text }: CardParams) => (
 export default function Home() {
   return (
     <Fragment>
-      <Navbar />
       <section className="w-full h-full flex flex-col items-center gap-5 mx-auto p-10 md:pt-20 md:p-0 text-black text-center max-w-screen-limit">
         <h1 className="mx-auto md:mt-16 text-3xl font-semibold ">
           Construa Seu Site em Instantes com{" "}

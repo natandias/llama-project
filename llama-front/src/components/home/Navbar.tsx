@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
-import MenuItems from "@/components/MenuItems";
+import MenuItems from "@/components/home/MenuItems";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
