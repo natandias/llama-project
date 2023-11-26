@@ -1,4 +1,5 @@
 import { LogoutOutlined } from "@ant-design/icons";
+import Link from "next/link";
 
 type props = {
   isOpen: boolean;
@@ -7,13 +8,16 @@ type props = {
 export default function Sidebar({ isOpen }: props) {
   return (
     <aside
-      className={`h-[88vh] md:h-[94vh] flex flex-col gap-5 ${
+      className={`h-page-mobile md:h-page flex flex-col gap-5 ${
         isOpen
           ? "absolute md:relative w-full md:w-72 text-black"
           : "relative w-0 text-transparent"
       } bg-zinc-200 transition-all ease-in-out delay-200 text-center pt-6`}
     >
-      <h1 className="text-xl">Meus sites</h1>
+      <Link className="text-xl" href="/dashboard">
+        Meus sites
+      </Link>
+
       <h1 className="text-xl">Perfil</h1>
 
       <a

@@ -15,6 +15,10 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      height: {
+        "page": "94vh",
+        "page-mobile": "88vh",
+      },
       minWidth: {
         "1/2": "50%",
         "1/4": "25%",

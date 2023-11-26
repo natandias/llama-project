@@ -14,17 +14,21 @@ const POST = withApiAuthRequired(async function (
   const { accessToken } = await getAccessToken(req, res);
   const reqBody = await req.json();
   try {
+    console.log("reqBody", reqBody);
     const response = await createSite(reqBody, accessToken);
     const data = response.data;
 
     if (response.status !== 201) {
-      return NextResponse.json({ message: data?.message, status: 400 });
+      return NextResponse.json({ message: data?.message }, { status: 400 });
     }
 
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error("/api/site error", error);
-    return NextResponse.json({ message: "Failed to create site", status: 400 });
+    return NextResponse.json(
+      { message: "Failed to create site" },
+      { status: 400 }
+    );
   }
 });
 

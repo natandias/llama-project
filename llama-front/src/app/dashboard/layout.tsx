@@ -2,6 +2,8 @@
 import Navbar from "@/components/dashboard/Navbar";
 import Sidebar from "@/components/dashboard/Sidebar";
 import { useState } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 export default function DashboardLayout({
   children,
@@ -18,11 +20,12 @@ export default function DashboardLayout({
       <div className="flex flex-row w-full">
         <Sidebar isOpen={isSidebarOpen} />
         <div
-          className={`w-full h-full md:pl-5 pt-10 ${
+          className={`h-page-mobile md:h-page flex justify-center w-full md:pl-5 pt-10 md:pt-14 ${
             isSidebarOpen ? "invisible md:visible" : "visible md:visible"
           }`}
         >
           {children}
+          <ToastContainer />
         </div>
       </div>
     </section>
