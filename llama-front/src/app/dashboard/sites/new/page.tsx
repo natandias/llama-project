@@ -52,7 +52,6 @@ export default withPageAuthRequired(function NewSite() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async formValues => {
-    console.log("data", formValues);
     try {
       const { name, primaryColor, secondaryColor } = formValues;
       const data = {
@@ -69,9 +68,7 @@ export default withPageAuthRequired(function NewSite() {
       const responseData = await response.json();
       if (!response.ok) throw responseData;
 
-      console.log("response", responseData);
-
-      const { site_id } = responseData;
+      const { site_id } = responseData.data;
 
       router.push(`/dashboard/sites/new/${site_id}/description`);
     } catch (error) {
@@ -80,11 +77,8 @@ export default withPageAuthRequired(function NewSite() {
     }
   };
 
-  const t = watch();
-  console.log("t", t);
-
   return (
-    <section className="flex">
+    <section className="flex mt-14">
       <form
         className="flex flex-col gap-5 min-w-1/4 items-center"
         onSubmit={handleSubmit(onSubmit)}
@@ -97,14 +91,6 @@ export default withPageAuthRequired(function NewSite() {
           })}
           errorMessage={errors.name?.message}
         />
-
-        {/* <Input
-          label="Escolha uma cor principal para seu site"
-          inputId="name"
-          inputProps={register("name", {
-            required: { value: true, message: "Nome é obrigatório" },
-          })}
-        /> */}
 
         <div className="mb-4 flex flex-col items-center gap-3">
           <h1>Escolha uma cor principal para seu site</h1>
@@ -153,7 +139,7 @@ export default withPageAuthRequired(function NewSite() {
 
         <button
           type="submit"
-          className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 rounded-md mt-auto mb-8"
+          className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 rounded-md mt-auto mb-10"
         >
           Prosseguir
         </button>

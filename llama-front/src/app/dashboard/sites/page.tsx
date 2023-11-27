@@ -30,7 +30,7 @@ const ExistingSiteCard = ({ title, onClick }: ExistingSiteCardProps) => (
 export default withPageAuthRequired(function Dashboard() {
   const router = useRouter();
 
-  const addNewSite = () => router.push("dashboard/site/new");
+  const addNewSite = () => router.push("/dashboard/sites/new");
   const openSite = (id: string) => {};
 
   return (
