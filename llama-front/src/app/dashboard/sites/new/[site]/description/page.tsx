@@ -135,7 +135,7 @@ export default withPageAuthRequired(function SiteDescription() {
               </div>
             ))
           ) : (
-            <h1 className="text-xl">
+            <h1 className={`text-xl ${isLoading ? "bg-white blur-lg " : ""}`}>
               Descreva para nossa IA o que deseja em seu site
             </h1>
           )}

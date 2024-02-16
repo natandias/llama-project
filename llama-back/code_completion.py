@@ -10,6 +10,5 @@ class CodeCompletion(Resource):
     def post(self):
         args = parser.parse_args()
         prompt = args["prompt"]
-        print(prompt)
         result = llama.code_completion(prompt)
         return result, 201

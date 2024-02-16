@@ -32,7 +32,7 @@ export default function Sidebar({ isOpen }: props) {
         Meus sites
       </Link>
 
-      <h1 className="text-xl p-4">Perfil</h1>
+      {/* <h1 className="text-xl p-4">Perfil</h1> */}
 
       <a
         className={`flex items-center justify-center text-xl ${

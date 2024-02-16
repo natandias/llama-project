@@ -1,17 +1,34 @@
 import api from "./api";
 
-type responseDataType = {
+type createSiteResponseType = {
   success: boolean;
   message: string;
 };
 
-type requestDataType = {
+type createSiteRequestType = {
   siteName: string;
 };
 
-const createSite = (data: requestDataType, token: string | undefined) =>
-  api.post<responseDataType>("site", data, {
+type sitesDataType = {
+  _id: string;
+  name: string;
+  primaryColor: string;
+  secondaryColor: string;
+}[];
+
+type listSitesResponseType = {
+  success: boolean;
+  data: sitesDataType;
+};
+
+const createSite = (data: createSiteRequestType, token: string | undefined) =>
+  api.post<createSiteResponseType>("site", data, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-export { createSite };
+const listSites = (token: string | undefined) =>
+  api.get<listSitesResponseType>("site/list", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export { createSite, listSites };

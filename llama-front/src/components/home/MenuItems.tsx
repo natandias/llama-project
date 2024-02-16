@@ -4,8 +4,8 @@ const MenuItems = () => {
   return (
     <Fragment>
       <div className="flex flex-col md:flex-row gap-10 md:ml-auto text-center -mt-16 md:mt-0">
-        <h1>Produto</h1>
-        <h1>Quem somos</h1>
+        {/* <h1>Produto</h1>
+        <h1>Quem somos</h1> */}
       </div>
 
       <a

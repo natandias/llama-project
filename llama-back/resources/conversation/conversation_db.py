@@ -6,7 +6,6 @@ from bson import json_util, _dict_to_bson
 def save_conversation(id, data):
     if id:
         conversation = mongo.db.conversations.find_one({"site_id": id})
-        print("conversation", conversation)
         if conversation:
             conversations = conversation["conversations"]
             conversations.append(data)

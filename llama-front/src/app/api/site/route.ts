@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import { getAccessToken, withApiAuthRequired } from "@auth0/nextjs-auth0";
-import { createSite } from "@/queries/sites";
+import { createSite, listSites } from "@/queries/sites";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -14,7 +14,6 @@ const POST = withApiAuthRequired(async function (
   const { accessToken } = await getAccessToken(req, res);
   const reqBody = await req.json();
   try {
-    console.log("reqBody", reqBody);
     const response = await createSite(reqBody, accessToken);
     const data = response.data;
 
@@ -32,4 +31,14 @@ const POST = withApiAuthRequired(async function (
   }
 });
 
-export { POST };
+const GET = withApiAuthRequired(async function (
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const { accessToken } = await getAccessToken(req, res);
+  const response = await listSites(accessToken);
+  const sites = response.data.data;
+  return NextResponse.json(sites, { status: 200 });
+});
+
+export { GET, POST };

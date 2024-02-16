@@ -8,6 +8,6 @@ export const GET = handleAuth({
       // Add the `offline_access` scope to also get a Refresh Token
       scope: "openid profile email read:products", // or AUTH0_SCOPE,
     },
-    returnTo: "/dashboard",
+    returnTo: "/dashboard/sites",
   }),
 });

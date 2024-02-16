@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { PlusOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
 
 type NewSiteCardProps = {
   onClick: () => void;
@@ -27,16 +28,52 @@ const ExistingSiteCard = ({ title, onClick }: ExistingSiteCardProps) => (
   </button>
 );
 
+type SitesData = {
+  id: string;
+  name: string;
+  primaryColor: string;
+  secondaryColor: string;
+}[];
+
 export default withPageAuthRequired(function Dashboard() {
   const router = useRouter();
+  const [sites, setSites] = useState<SitesData>([]);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch("/api/site", {
+      method: "GET",
+    })
+      .then(async response => {
+        const responseData = await response.json();
+        console.log("responseData", responseData);
+        setSites(responseData);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        setIsLoading(false);
+        console.error(`/api/sites/ error`, error);
+      });
+  }, []);
 
   const addNewSite = () => router.push("/dashboard/sites/new");
-  const openSite = (id: string) => {};
+  const openSite = (id: string) =>
+    router.push(`/dashboard/sites/new/${id}/description`);
 
   return (
     <section className="w-full flex flex-row flex-wrap gap-5 justify-center items-center">
       <NewSiteCard onClick={addNewSite} />
-      <ExistingSiteCard title="My Website" onClick={() => openSite("1234")} />
+      {sites &&
+        sites.map(site => (
+          <div key={site.id}>
+            <ExistingSiteCard
+              title={site.name}
+              onClick={() => openSite(site.id)}
+            />
+          </div>
+        ))}
     </section>
   );
 });
