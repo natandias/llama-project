@@ -3,8 +3,10 @@ import { useState } from "react";
 import Image from "next/image";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import MenuItems from "@/components/home/MenuItems";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default function Navbar() {
+  const authSession = useUser();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -22,7 +24,7 @@ export default function Navbar() {
         height={80}
       />
       <div className="hidden md:flex flex-row w-full justify-center items-center m-auto">
-        <MenuItems />
+        <MenuItems isLogged={!!authSession.user} />
       </div>
 
       <div className="flex md:hidden ml-auto ">
@@ -50,7 +52,7 @@ export default function Navbar() {
         </button>
 
         <div className="flex flex-col justify-center items-center h-full gap-10">
-          <MenuItems />
+          <MenuItems isLogged={!!authSession.user} />
         </div>
       </div>
     </nav>
