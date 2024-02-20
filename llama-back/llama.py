@@ -76,5 +76,6 @@ def chat(prompt, **kwargs):
     print(prompt_template)
     result = chat_llm(prompt_template, max_tokens=3048)
     id = kwargs.get("id", None)
-    save_conversation(id=id, data=dict(prompt=prompt, response=result))
-    return result["choices"][0]["text"]
+    formatted_result = result["choices"][0]["text"];
+    save_conversation(id=id, data=dict(prompt=prompt, response=formatted_result))
+    return formatted_result;
