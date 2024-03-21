@@ -5,7 +5,7 @@ from resources.conversation.conversation_service import find_conversation
 
 
 class ConversationManager(Resource):
-    @require_auth(None)
+    # @require_auth(None)
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument(
