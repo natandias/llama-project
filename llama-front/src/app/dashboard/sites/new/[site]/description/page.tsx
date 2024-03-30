@@ -1,4 +1,8 @@
-import { getAccessToken } from "@auth0/nextjs-auth0";
+import {
+  AppRouterPageRoute,
+  getAccessToken,
+  withPageAuthRequired,
+} from "@auth0/nextjs-auth0";
 import DescriptionPage from "./description-page";
 import { ChatsReqReturnValue, Conversations } from "./types";
 import CONSTANTS from "@/constants";
@@ -23,21 +27,23 @@ const getChats: GetChats = async ({ params }) => {
 
   if (res.status === 200) {
     const chats: ChatsReqReturnValue = await res.json();
-    console.log("chats", chats);
     return chats;
   }
   return null;
 };
 
-export default async function Page(props: PageProps) {
-  // Fetch data directly in a Server Component
-  const result = await getChats(props);
-  let conversations: Conversations = [];
-  if (result?.success && result.data) {
-    const { data: chatsData } = result;
-    conversations = chatsData.conversations;
-  }
+export default withPageAuthRequired(
+  async function Page(props: PageProps) {
+    // Fetch data directly in a Server Component
+    const result = await getChats(props);
+    let conversations: Conversations = [];
+    if (result?.success && result.data) {
+      const { data: chatsData } = result;
+      conversations = chatsData.conversations;
+    }
 
-  // Forward fetched data to your Client Component
-  return <DescriptionPage conversations={conversations} />;
-}
+    // Forward fetched data to your Client Component
+    return <DescriptionPage conversations={conversations} />;
+  } as AppRouterPageRoute,
+  { returnTo: "/" }
+);

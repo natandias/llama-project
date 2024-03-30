@@ -59,7 +59,6 @@ def code_completion(prompt):
 
 
 def chat(prompt, **kwargs):
-    print('hit chat')
     chat_llm = LlamaCpp(
         model_path=config["LLM_CHAT_MODEL_PATH"],
         temperature=0.1,
@@ -76,12 +75,12 @@ def chat(prompt, **kwargs):
 
     id = kwargs.get("id", None)
 
-    chat_message_history = MongoDBChatMessageHistory(
-        session_id=id,
-        connection_string=config["MONGO_URI"],
-        database_name=config["DB_NAME"],
-        collection_name="chat_histories",
-    )
+    # chat_message_history = MongoDBChatMessageHistory(
+    #     session_id=id,
+    #     connection_string=config["MONGO_URI"],
+    #     database_name=config["DB_NAME"],
+    #     collection_name="chat_histories",
+    # )
 
     conversation = find_conversation(id)
 
@@ -100,7 +99,6 @@ def chat(prompt, **kwargs):
     result = chat_llm(prompt_formatted, max_tokens=3048)
     formatted_result = result["choices"][0]["text"]
 
-
     formatted_summary = ''
     if conversation:
         conversation_summary = conversation.get('summary', '')
@@ -112,10 +110,11 @@ def chat(prompt, **kwargs):
         [/INST] """
         summary_result = chat_llm(summary_prompt, max_tokens=3048)
         formatted_summary = summary_result["choices"][0]["text"]
+        print("summary_prompt", summary_prompt)
         print('formatted_summary', formatted_summary)
 
-    chat_message_history.add_user_message(prompt)
-    chat_message_history.add_ai_message(formatted_result)
+    # chat_message_history.add_user_message(prompt)
+    # chat_message_history.add_ai_message(formatted_result)
 
     save_conversation(id=id, data=dict(prompt=prompt, response=formatted_result, summary=formatted_summary))
     return formatted_result

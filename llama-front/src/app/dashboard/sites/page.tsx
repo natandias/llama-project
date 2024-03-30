@@ -1,4 +1,4 @@
-import { getAccessToken } from "@auth0/nextjs-auth0";
+import { getAccessToken, withPageAuthRequired } from "@auth0/nextjs-auth0";
 import CONSTANTS from "@/constants";
 import { GetSitesReqReturnValue, SitesData } from "./types";
 import Dashboard from "./dashboard";
@@ -21,15 +21,18 @@ const getSites: GetSites = async () => {
   return null;
 };
 
-export default async function Page() {
-  // Fetch data directly in a Server Component
-  const result = await getSites();
-  let sites: SitesData = [];
-  if (result?.success && result.data) {
-    const { data: sitesData } = result;
-    sites = sitesData;
-  }
+export default withPageAuthRequired(
+  async function Page() {
+    // Fetch data directly in a Server Component
+    const result = await getSites();
+    let sites: SitesData = [];
+    if (result?.success && result.data) {
+      const { data: sitesData } = result;
+      sites = sitesData;
+    }
 
-  // Forward fetched data to your Client Component
-  return <Dashboard sites={sites} />;
-}
+    // Forward fetched data to your Client Component
+    return <Dashboard sites={sites} />;
+  },
+  { returnTo: "/" }
+);

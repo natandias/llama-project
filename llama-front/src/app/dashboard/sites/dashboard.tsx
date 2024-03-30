@@ -32,7 +32,7 @@ const ExistingSiteCard = ({ title, onClick }: ExistingSiteCardProps) => (
   </button>
 );
 
-export default withPageAuthRequired(function Dashboard({ sites }: PageProps) {
+export default function Dashboard({ sites }: PageProps) {
   const router = useRouter();
 
   const addNewSite = () => router.push("/dashboard/sites/new");
@@ -53,4 +53,4 @@ export default withPageAuthRequired(function Dashboard({ sites }: PageProps) {
         ))}
     </section>
   );
-});
+}

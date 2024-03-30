@@ -6,7 +6,7 @@ export const GET = handleAuth({
     authorizationParams: {
       audience: process.env.NEXT_PUBLIC_API_URL, // or AUTH0_AUDIENCE
       // Add the `offline_access` scope to also get a Refresh Token
-      scope: "openid profile email read:products", // or AUTH0_SCOPE,
+      scope: "openid profile email read:products offline_access", // or AUTH0_SCOPE,
     },
     returnTo: "/dashboard/sites",
   }),
