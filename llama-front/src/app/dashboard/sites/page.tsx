@@ -1,79 +1,35 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { PlusOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { getAccessToken } from "@auth0/nextjs-auth0";
+import CONSTANTS from "@/constants";
+import { GetSitesReqReturnValue, SitesData } from "./types";
+import Dashboard from "./dashboard";
 
-type NewSiteCardProps = {
-  onClick: () => void;
+type GetSites = () => Promise<GetSitesReqReturnValue | null>;
+
+const getSites: GetSites = async () => {
+  const { accessToken } = await getAccessToken();
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/site/list`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    next: { tags: [CONSTANTS.GET_SITES] },
+  });
+
+  if (res.status === 200) {
+    const sites: GetSitesReqReturnValue = await res.json();
+    return sites;
+  }
+  return null;
 };
 
-type ExistingSiteCardProps = { title: string; onClick: () => void };
+export default async function Page() {
+  // Fetch data directly in a Server Component
+  const result = await getSites();
+  let sites: SitesData = [];
+  if (result?.success && result.data) {
+    const { data: sitesData } = result;
+    sites = sitesData;
+  }
 
-const NewSiteCard = ({ onClick }: NewSiteCardProps) => (
-  <button
-    className="flex flex-col gap-6 w-80 h-52 bg-white border border-black rounded-md p-6 items-center justify-center"
-    onClick={onClick}
-  >
-    <PlusOutlined className="text-2xl" />
-  </button>
-);
-
-const ExistingSiteCard = ({ title, onClick }: ExistingSiteCardProps) => (
-  <button
-    className="flex flex-col gap-6 w-80 h-52 bg-primary text-black border border-black rounded-md items-center justify-center"
-    onClick={onClick}
-  >
-    {title}
-  </button>
-);
-
-type SitesData = {
-  id: string;
-  name: string;
-  primaryColor: string;
-  secondaryColor: string;
-}[];
-
-export default withPageAuthRequired(function Dashboard() {
-  const router = useRouter();
-  const [sites, setSites] = useState<SitesData>([]);
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-    fetch("/api/site", {
-      method: "GET",
-    })
-      .then(async response => {
-        const responseData = await response.json();
-        console.log("responseData", responseData);
-        setSites(responseData);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        setIsLoading(false);
-        console.error(`/api/sites/ error`, error);
-      });
-  }, []);
-
-  const addNewSite = () => router.push("/dashboard/sites/new");
-  const openSite = (id: string) =>
-    router.push(`/dashboard/sites/new/${id}/description`);
-
-  return (
-    <section className="w-full flex flex-row flex-wrap gap-5 justify-center items-center">
-      <NewSiteCard onClick={addNewSite} />
-      {sites &&
-        sites.map(site => (
-          <div key={site.id}>
-            <ExistingSiteCard
-              title={site.name}
-              onClick={() => openSite(site.id)}
-            />
-          </div>
-        ))}
-    </section>
-  );
-});
+  // Forward fetched data to your Client Component
+  return <Dashboard sites={sites} />;
+}

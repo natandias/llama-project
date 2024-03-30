@@ -34,4 +34,8 @@ class ConversationFind(Resource):
     def get(self, site_id):
         print(site_id)
         conversation = find_conversation(site_id)
-        return {"success": True, "data": conversation}, 200
+        print("conversation", conversation)
+        return {
+            "success": True,
+            "data": conversation,
+        }, 200

@@ -9,12 +9,8 @@ import {
 } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-
-type Inputs = {
-  name: string;
-  primaryColor: string;
-  secondaryColor: string;
-};
+import { Inputs } from "./types";
+import { createSite } from "./actions";
 
 type TextInputProps = {
   label: string;
@@ -60,18 +56,11 @@ export default withPageAuthRequired(function NewSite() {
         secondaryColor: secondaryColor.hex,
       };
 
-      const response = await fetch("/api/site", {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-
-      const responseData = await response.json();
-      if (!response.ok) throw responseData;
-
+      const responseData = await createSite(data);
       const { site_id } = responseData.data;
 
       router.push(`/dashboard/sites/new/${site_id}/description`);
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage = error?.message ?? "Failed to create site";
       toast.error(errorMessage);
     }

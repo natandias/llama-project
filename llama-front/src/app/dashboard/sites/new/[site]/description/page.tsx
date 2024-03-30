@@ -1,7 +1,7 @@
 import { getAccessToken } from "@auth0/nextjs-auth0";
 import DescriptionPage from "./description-page";
-import { ChatsReqReturnValue } from "./types";
-import CONSTANTS from "./constants";
+import { ChatsReqReturnValue, Conversations } from "./types";
+import CONSTANTS from "@/constants";
 
 type PageProps = {
   params: {
@@ -20,6 +20,7 @@ const getChats: GetChats = async ({ params }) => {
     headers: { Authorization: `Bearer ${accessToken}` },
     next: { tags: [CONSTANTS.GET_CHAT] },
   });
+
   if (res.status === 200) {
     const chats: ChatsReqReturnValue = await res.json();
     console.log("chats", chats);
@@ -30,10 +31,12 @@ const getChats: GetChats = async ({ params }) => {
 
 export default async function Page(props: PageProps) {
   // Fetch data directly in a Server Component
-  const { data: chatsData } = (await getChats(props)) ?? {
-    data: { conversations: [] },
-  };
-  const { conversations } = chatsData;
+  const result = await getChats(props);
+  let conversations: Conversations = [];
+  if (result?.success && result.data) {
+    const { data: chatsData } = result;
+    conversations = chatsData.conversations;
+  }
 
   // Forward fetched data to your Client Component
   return <DescriptionPage conversations={conversations} />;

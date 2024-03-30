@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { useParams } from "next/navigation";
