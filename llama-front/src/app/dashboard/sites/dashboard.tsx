@@ -1,36 +1,12 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { PlusOutlined } from "@ant-design/icons";
 import { SitesData } from "./types";
+import NewSiteCard from "@/components/dashboard/NewSiteCard";
+import ExistingSiteCard from "@/components/dashboard/ExistingSiteCard";
 
 type PageProps = {
   sites: SitesData;
 };
-
-type NewSiteCardProps = {
-  onClick: () => void;
-};
-
-type ExistingSiteCardProps = { title: string; onClick: () => void };
-
-const NewSiteCard = ({ onClick }: NewSiteCardProps) => (
-  <button
-    className="flex flex-col gap-6 w-80 h-52 bg-white border border-black rounded-md p-6 items-center justify-center"
-    onClick={onClick}
-  >
-    <PlusOutlined className="text-2xl" />
-  </button>
-);
-
-const ExistingSiteCard = ({ title, onClick }: ExistingSiteCardProps) => (
-  <button
-    className="flex flex-col gap-6 w-80 h-52 bg-primary text-black border border-black rounded-md items-center justify-center"
-    onClick={onClick}
-  >
-    {title}
-  </button>
-);
 
 export default function Dashboard({ sites }: PageProps) {
   const router = useRouter();

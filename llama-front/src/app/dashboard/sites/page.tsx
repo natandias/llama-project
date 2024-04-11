@@ -6,7 +6,9 @@ import Dashboard from "./dashboard";
 type GetSites = () => Promise<GetSitesReqReturnValue | null>;
 
 const getSites: GetSites = async () => {
-  const { accessToken } = await getAccessToken();
+  const { accessToken } = await getAccessToken({
+    refresh: false,
+  });
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/site/list`, {
     method: "GET",
