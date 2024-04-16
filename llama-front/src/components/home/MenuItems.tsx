@@ -12,10 +12,7 @@ const loginButtonClassnames =
 const MenuItems = ({ isLogged }: MenuItemsProps) => {
   const router = useRouter();
 
-  const goToDashboard = () => {
-    console.log("called goToDashboard");
-    router.push(ROUTES_CONSTANTS.DASHBOARD_SITES);
-  };
+  const goToDashboard = () => router.push(ROUTES_CONSTANTS.DASHBOARD_SITES);
 
   return (
     <Fragment>
