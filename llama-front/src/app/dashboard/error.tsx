@@ -18,15 +18,16 @@ export default function Error({
   }, [error]);
 
   return (
-    <div>
+    <div className="flex flex-col m-auto">
       <h2>Algo deu errado!</h2>
       <button
+        className="text-red-500"
         onClick={
           // Attempt to recover by trying to re-render the segment
           () => reset()
         }
       >
-        Try again
+        Recarregue a página
       </button>
     </div>
   );

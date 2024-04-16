@@ -1,5 +1,5 @@
 "use client";
-import { ChromePicker } from "react-color";
+import { SwatchesPicker } from "react-color";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import {
   useForm,
@@ -44,8 +44,17 @@ export default withPageAuthRequired(function NewSite() {
     handleSubmit,
     watch,
     control,
-    formState: { errors },
-  } = useForm<Inputs>();
+    formState: { errors, isSubmitting },
+  } = useForm<Inputs>({
+    defaultValues: {
+      primaryColor: {
+        hex: undefined,
+      },
+      secondaryColor: {
+        hex: undefined,
+      },
+    },
+  });
 
   const onSubmit: SubmitHandler<Inputs> = async formValues => {
     try {
@@ -66,7 +75,12 @@ export default withPageAuthRequired(function NewSite() {
     }
   };
 
-  return (
+  return isSubmitting ? (
+    <section className="flex flex-col items-center my-auto">
+      <h1 className="text-lg">Processando os dados...</h1>
+      <h2 className="text-lg">Por favor aguarde um momento</h2>
+    </section>
+  ) : (
     <section className="flex mt-14">
       <form
         className="flex flex-col gap-5 min-w-1/4 items-center"
@@ -81,52 +95,68 @@ export default withPageAuthRequired(function NewSite() {
           errorMessage={errors.name?.message}
         />
 
-        <div className="mb-4 flex flex-col items-center gap-3">
-          <h1>Escolha uma cor principal para seu site</h1>
-          <Controller
-            control={control}
-            name="primaryColor"
-            rules={{
-              required: { value: true, message: "Cor primária é obrigatório" },
-            }}
-            render={({ field: { onChange, value } }) => (
-              <ChromePicker
-                color={value}
-                onChangeComplete={onChange}
-                disableAlpha
-              />
-            )}
-          />
-          <span className="text-red-500 text-sm ">
-            {errors.primaryColor?.message}
-          </span>
-        </div>
+        <div className="flex flex-row gap-10 flex-wrap items-center">
+          <div className="mb-4 flex flex-col items-center gap-3 m-auto">
+            <h1>Escolha uma cor principal para seu site</h1>
+            <Controller
+              control={control}
+              name="primaryColor"
+              rules={{
+                required: {
+                  value: true,
+                  message: "Cor primária é obrigatório",
+                },
+              }}
+              render={({ field: { onChange, value } }) => (
+                <SwatchesPicker
+                  color={value.hex}
+                  onChangeComplete={onChange}
+                  height={600}
+                  styles={{
+                    default: {
+                      overflow: { overflow: "auto" },
+                    },
+                  }}
+                />
+              )}
+            />
+            <span className="text-red-500 text-sm ">
+              {errors.primaryColor?.message}
+            </span>
+          </div>
 
-        <div className="mb-4 flex flex-col items-center gap-3">
-          <h1>Escolha uma cor secundária para seu site</h1>
-          <Controller
-            control={control}
-            name="secondaryColor"
-            rules={{
-              required: {
-                value: true,
-                message: "Cor secundária é obrigatório",
-              },
-            }}
-            render={({ field: { onChange, value } }) => (
-              <ChromePicker
-                color={value}
-                onChangeComplete={onChange}
-                disableAlpha
-              />
-            )}
-          />
-          <span className="text-red-500 text-sm ">
-            {errors.secondaryColor?.message}
-          </span>
+          <div className="mb-4 flex flex-col items-center gap-3  m-auto">
+            <h1>Escolha uma cor secundária para seu site</h1>
+            <Controller
+              control={control}
+              name="secondaryColor"
+              rules={{
+                required: {
+                  value: true,
+                  message: "Cor secundária é obrigatório",
+                },
+              }}
+              render={({ field: { onChange, value } }) => (
+                <SwatchesPicker
+                  color={value.hex}
+                  onChangeComplete={onChange}
+                  height={600}
+                  styles={{
+                    default: {
+                      overflow: { overflow: "auto" },
+                    },
+                  }}
+                />
+              )}
+            />
+            <span className="text-red-500 text-sm ">
+              {errors.secondaryColor?.message}
+            </span>
+          </div>
         </div>
 
         <button
+          disabled={isSubmitting}
           type="submit"
           className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 rounded-md mt-auto mb-10"
         >

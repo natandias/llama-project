@@ -103,7 +103,7 @@ def chat(prompt, **kwargs):
     formatted_summary = ''
     if conversation:
         conversation_summary = conversation.get('summary', '')
-        summary_prompt = f""" [INST]
+        summary_prompt = f"""[INST]
         Resuma a seguinte interação:
         Human: {prompt}
         AI: {formatted_result}
@@ -111,8 +111,14 @@ def chat(prompt, **kwargs):
         [/INST] """
         summary_result = chat_llm(summary_prompt, max_tokens=3048)
         formatted_summary = summary_result["choices"][0]["text"]
-        print("summary_prompt", summary_prompt)
-        print('formatted_summary', formatted_summary)
+    else:
+        summary_prompt = f"""[INST]
+        Resuma a seguinte interação:
+        Human: {prompt}
+        AI: {formatted_result}
+        [/INST] """
+        summary_result = chat_llm(summary_prompt, max_tokens=3048)
+        formatted_summary = summary_result["choices"][0]["text"]
 
     # chat_message_history.add_user_message(prompt)
     # chat_message_history.add_ai_message(formatted_result)

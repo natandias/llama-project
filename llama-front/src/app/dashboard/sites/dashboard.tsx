@@ -16,7 +16,7 @@ export default function Dashboard({ sites }: PageProps) {
     router.push(`/dashboard/sites/new/${id}/description`);
 
   return (
-    <section className="w-full flex flex-row flex-wrap gap-5 justify-center items-center">
+    <section className="w-full flex flex-row flex-wrap gap-3 justify-center items-center">
       <NewSiteCard onClick={addNewSite} />
       {sites &&
         sites.map(site => (

@@ -1,6 +1,7 @@
 from flask import jsonify
 from flask_restful import Resource, reqparse
 from resources.sites.sites_service import create_site, find_site, list_sites
+import llama
 
 from validator import require_auth
 
@@ -24,8 +25,13 @@ class SiteManager(Resource):
             "secondaryColor": args["secondaryColor"],
         }
 
-        insert_result_id = create_site(site)
-        return {"success": True, "data": {"site_id": insert_result_id}}, 201
+        insert_site_id = create_site(site)
+        llama.chat(
+            id=insert_site_id,
+            prompt=f'Oi. Preciso de ajuda para criar o site {args["name"]}',
+        )
+
+        return {"success": True, "data": {"site_id": insert_site_id}}, 201
 
 
 class SitesFind(Resource):
