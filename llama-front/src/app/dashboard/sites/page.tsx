@@ -16,6 +16,8 @@ const getSites: GetSites = async () => {
     next: { tags: [CONSTANTS.GET_SITES] },
   });
 
+  console.log("res", res);
+
   if (res.status === 200) {
     const sites: GetSitesReqReturnValue = await res.json();
     return sites;

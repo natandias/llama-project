@@ -16,3 +16,7 @@ export type ChatsReqReturnValue = {
 export type Inputs = {
   prompt: string;
 };
+
+export type CreateSiteReqParams = {
+  site_id: string;
+};

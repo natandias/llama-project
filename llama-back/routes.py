@@ -19,4 +19,4 @@ def define_routes(api):
     api.add_resource(ConversationFind, "/api/chat/<site_id>")
 
     # api.add_resource(UserLogin, "/api/user/login")
-    api.add_resource(CodeCompletion, "/api/code")
+    api.add_resource(CodeCompletion, "/api/code/<site_id>")

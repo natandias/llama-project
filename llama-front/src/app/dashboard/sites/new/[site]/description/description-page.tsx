@@ -1,15 +1,14 @@
 "use client";
-import { useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
-import { Conversations, Inputs } from './types';
-import { sendMessage } from './actions';
+import { Conversations, Inputs } from "./types";
+import { sendMessage, generateSite } from "./actions";
 
 type Props = {
-  conversations: Conversations | []
-}
+  conversations: Conversations | [];
+};
 
 const IaMessage = ({ text }: { text: string }) => (
   <div className="max-w-[900px] p-4 rounded-md bg-gray-200 text-left">
@@ -23,9 +22,9 @@ const MyMessage = ({ text }: { text: string }) => (
   </div>
 );
 
-export default withPageAuthRequired(function SiteDescription({ conversations }: Props) {
-  const formRef = useRef<React.RefObject<HTMLFormElement>>();
-
+export default withPageAuthRequired(function SiteDescription({
+  conversations,
+}: Props) {
   const {
     register,
     handleSubmit,
@@ -56,12 +55,24 @@ export default withPageAuthRequired(function SiteDescription({ conversations }: 
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     //it triggers by pressing the enter key
-    if (e.key === 'Enter' || e.key === 'NumpadEnter') {
-      e.preventDefault()
-      e.currentTarget.form?.requestSubmit()
+    if (e.key === "Enter" || e.key === "NumpadEnter") {
+      e.preventDefault();
+      e.currentTarget.form?.requestSubmit();
     }
   };
 
+  const triggerGenerateSite = async () => {
+    try {
+      const data = { site_id: site };
+
+      await generateSite(data);
+
+      reset();
+    } catch (error: any) {
+      const errorMessage = error?.message ?? "Failed to generate site";
+      toast.error(errorMessage);
+    }
+  };
   return (
     <section className="flex mt-10">
       <form
@@ -82,7 +93,9 @@ export default withPageAuthRequired(function SiteDescription({ conversations }: 
               </div>
             ))
           ) : (
-            <h1 className={`text-xl ${isSubmitting ? "bg-white blur-lg " : ""}`}>
+            <h1
+              className={`text-xl ${isSubmitting ? "bg-white blur-lg " : ""}`}
+            >
               Descreva para nossa IA o que deseja em seu site
             </h1>
           )}
@@ -112,6 +125,19 @@ export default withPageAuthRequired(function SiteDescription({ conversations }: 
             ""
           )}
           <span className="text-red-500 text-sm">{errors.prompt?.message}</span>
+        </div>
+        <div>
+          <h1>
+            Quando tiver fornecido todos os requisitos, clique em Prosseguir.
+          </h1>
+          <button
+            className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 rounded-md mt-auto mb-10"
+            type="button"
+            disabled={isSubmitting}
+            onClick={triggerGenerateSite}
+          >
+            Prosseguir
+          </button>
         </div>
       </form>
     </section>
