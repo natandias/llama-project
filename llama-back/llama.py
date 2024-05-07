@@ -113,7 +113,7 @@ def create_site_code(site_id):
         top_p=0.95,
         callback_manager=callback_manager,
         verbose=True,
-        n_gpu_layers=16,
+        n_gpu_layers=18,
         # n_batch=256,
         f16_kv=True,
         model_kwargs={"repetition_penalty": 1.1},
@@ -128,12 +128,12 @@ def create_site_code(site_id):
     """
     )
 
-    code_prompt = f"Write a code using HTML, CSS and Javascript to meet the following requirements: {formatted_software_requirements}. Write it so I can just create a .html file and run it direct on the browser."
+    code_prompt = f"Write a working code using HTML, CSS and Javascript to meet the following requirements: {formatted_software_requirements}. Do not write anything besides the code. The website should have a good design. You're free to use libs as long as they can be used directly from a CDN"
 
     code_prompt_formatted = code_prompt_template.format(question=code_prompt)
 
     print(code_prompt_formatted)
-    result = code_llm(code_prompt_formatted, max_tokens=20048)
+    result = code_llm(code_prompt_formatted, max_tokens=16000)
     return result["choices"][0]["text"]
 
 
@@ -172,7 +172,11 @@ def chat(prompt, **kwargs):
     """
     )
 
-    prompt_formatted = prompt_template.format(conversation=prompt)
+    conversation_history = conversation.get(
+        "summary", "") if conversation else ''
+
+    prompt_formatted = prompt_template.format(
+        question=prompt, history=conversation_history)
 
     result = chat_llm(prompt_formatted, max_tokens=3048)
     formatted_result = result["choices"][0]["text"]
