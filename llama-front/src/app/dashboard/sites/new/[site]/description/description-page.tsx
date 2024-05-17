@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { Conversations, Inputs } from "./types";
 import { sendMessage, generateSite } from "./actions";
+import { useState } from "react";
 
 type Props = {
   conversations: Conversations | [];
@@ -25,11 +26,12 @@ const MyMessage = ({ text }: { text: string }) => (
 export default withPageAuthRequired(function SiteDescription({
   conversations,
 }: Props) {
+  const [isGeneratingSite, setIsGeneratingSite] = useState(false);
+
   const {
     register,
     handleSubmit,
     watch,
-    control,
     reset,
     formState: { errors, isSubmitSuccessful, isSubmitting },
   } = useForm<Inputs>();
@@ -65,15 +67,30 @@ export default withPageAuthRequired(function SiteDescription({
     try {
       const data = { site_id: site };
 
+      setIsGeneratingSite(true);
       await generateSite(data);
+      setIsGeneratingSite(false);
 
       reset();
     } catch (error: any) {
       const errorMessage = error?.message ?? "Failed to generate site";
+      setIsGeneratingSite(false);
       toast.error(errorMessage);
     }
   };
-  return (
+
+  return isGeneratingSite ? (
+    <section className="flex flex-col items-center my-auto">
+      <h1 className="text-lg">Processando os dados... Aguarde um momento.</h1>
+      {/* <h2 className="text-lg">Por favor aguarde um momento</h2> */}
+      <div className="flex space-x-2 justify-center items-center bg-black h-10 dark:invert">
+        <span className="sr-only">Loading...</span>
+        <div className="h-4 w-4 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+        <div className="h-4 w-4 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+        <div className="h-4 w-4 bg-white rounded-full animate-bounce"></div>
+      </div>
+    </section>
+  ) : (
     <section className="flex mt-10">
       <form
         className={`flex flex-col gap-5 text-center p-2 min-w-1/4 items-center `}

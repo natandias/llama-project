@@ -1,5 +1,7 @@
 from flask_restful import Resource, reqparse
 import llama
+import asyncio
+
 
 parser = reqparse.RequestParser()
 
@@ -23,5 +25,5 @@ class CodeCompletion(Resource):
         # )
         # args = parser.parse_args()
         # site_id = args["site_id"]
-        result = llama.create_site_code(site_id=site_id)
+        result = asyncio.run(llama.create_site_code(site_id=site_id))
         return result, 201

@@ -40,7 +40,7 @@ export default function Sidebar({ isOpen }: props) {
         } mt-auto mb-10`}
         href="/api/auth/logout"
       >
-        Logout <LogoutOutlined className="ml-4" />
+        Sair <LogoutOutlined className="ml-4" />
       </a>
     </aside>
   );
