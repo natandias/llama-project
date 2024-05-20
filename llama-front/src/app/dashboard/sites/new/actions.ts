@@ -15,8 +15,6 @@ export async function createSite(data: CreateSiteParams) {
 
     const responseData = await response.json();
 
-    console.log("createSite responseData", responseData);
-
     if (!response.ok) throw responseData;
     revalidateTag(CONSTANTS.GET_SITES);
     return responseData;
@@ -40,8 +38,6 @@ export async function getSummary(data: GenerateSummaryParams) {
     );
 
     const responseData = await response.json();
-
-    console.log("getSummary responseData", responseData);
 
     if (!response.ok) throw responseData;
     revalidateTag(CONSTANTS.GET_CHAT);

@@ -15,8 +15,6 @@ export async function sendMessage(data: Inputs) {
 
     const responseData = await response.json();
 
-    console.log("sendMessage responseData", responseData);
-
     if (!response.ok) throw responseData;
     revalidateTag(CONSTANTS.GET_CHAT);
     return responseData;
@@ -40,8 +38,6 @@ export async function generateSite(data: CreateSiteReqParams) {
     );
 
     const responseData = await response.json();
-
-    console.log("createSite responseData", responseData);
 
     if (!response.ok) throw responseData;
     revalidateTag(CONSTANTS.GET_CHAT);

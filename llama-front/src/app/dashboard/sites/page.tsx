@@ -5,6 +5,7 @@ import Dashboard from "./dashboard";
 
 type GetSites = () => Promise<GetSitesReqReturnValue | null>;
 
+
 const getSites: GetSites = async () => {
   const { accessToken } = await getAccessToken({
     refresh: false,
@@ -15,8 +16,6 @@ const getSites: GetSites = async () => {
     headers: { Authorization: `Bearer ${accessToken}` },
     next: { tags: [CONSTANTS.GET_SITES] },
   });
-
-  console.log("res", res);
 
   if (res.status === 200) {
     const sites: GetSitesReqReturnValue = await res.json();

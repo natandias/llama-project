@@ -8,8 +8,9 @@ import setup
 
 config = dotenv_values(".env")
 
-app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+app = Flask(__name__,)
+cors = CORS(app, resources={
+            r"/*": {"origins": "*", 'methods': ['POST', 'GET', 'PUT', 'DELETE', 'PATCH']}})
 api = Api(app)
 
 define_routes(api)

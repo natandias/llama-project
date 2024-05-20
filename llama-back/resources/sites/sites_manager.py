@@ -9,7 +9,8 @@ from validator import require_auth
 class SiteManager(Resource):
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument("name", type=str, help="Provide a name", required=True)
+        parser.add_argument(
+            "name", type=str, help="Provide a name", required=True)
         parser.add_argument(
             "primaryColor", type=str, help="Provide a primary color", required=True
         )
@@ -47,14 +48,19 @@ class SitesList(Resource):
         sites_list = list_sites()
         return {"success": True, "data": sites_list}, 200
 
+
+class SitesUpdate(Resource):
+    @require_auth(None)
     def patch(self, id):
+        print('SitesList patch', id)
         parser = reqparse.RequestParser()
         parser.add_argument("requirements", type=str,
-                            help="Provide requirements", required=False)
-        parser.add_argument("content", type=str,
-                            help="Provide content", required=False)
+                            help="Provide requirements", required=False, location="json")
+        parser.add_argument(
+            "content", type=str, help="Provide content", required=False, location="json")
         args = parser.parse_args(strict=True)
 
-        update_site = update_site(id, args)
+        print('updated_site', args)
+        updated_site = update_site(id, args)
 
         return {"success": True}, 201

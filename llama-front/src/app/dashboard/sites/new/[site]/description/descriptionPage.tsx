@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { Conversations, Inputs } from "./types";
 import { sendMessage, generateSite } from "./actions";
@@ -27,6 +27,8 @@ const MyMessage = ({ text }: { text: string }) => (
 export default withPageAuthRequired(function SiteDescription({
   conversations,
 }: Props) {
+  const router = useRouter();
+
   const [isGeneratingSite, setIsGeneratingSite] = useState(false);
 
   const {
@@ -71,8 +73,8 @@ export default withPageAuthRequired(function SiteDescription({
       setIsGeneratingSite(true);
       await getSummary(data);
       setIsGeneratingSite(false);
-
       reset();
+      router.push(`/dashboard/sites/new/${site}/requirements`);
     } catch (error: any) {
       const errorMessage = error?.message ?? "Failed to generate site";
       setIsGeneratingSite(false);

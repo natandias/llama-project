@@ -3,7 +3,7 @@ import {
   getAccessToken,
   withPageAuthRequired,
 } from "@auth0/nextjs-auth0";
-import DescriptionPage from "./description-page";
+import DescriptionPage from "./descriptionPage";
 import { ChatsReqReturnValue, Conversations } from "./types";
 import CONSTANTS from "@/constants";
 
