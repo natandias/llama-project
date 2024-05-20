@@ -4,6 +4,7 @@ from flask_cors import CORS
 from dotenv import dotenv_values
 from database import mongo
 from routes import define_routes
+import setup
 
 config = dotenv_values(".env")
 

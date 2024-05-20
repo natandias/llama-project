@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 import llama
 from validator import require_auth
 from resources.conversation.conversation_service import find_conversation
+import asyncio
 
 
 class ConversationManager(Resource):
@@ -38,3 +39,10 @@ class ConversationFind(Resource):
             "success": True,
             "data": conversation,
         }, 200
+
+
+class ConversationExtract(Resource):
+    # @require_auth(None)
+    def post(self, site_id):
+        result = asyncio.run(llama.generate_summary(site_id=site_id))
+        return result, 201

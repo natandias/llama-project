@@ -13,3 +13,7 @@ export type CreateSiteParams = {
   primaryColor: string;
   secondaryColor: string;
 };
+
+export type GenerateSummaryParams = {
+  site_id: string;
+};

@@ -1,11 +1,12 @@
 "use client";
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { Conversations, Inputs } from "./types";
 import { sendMessage, generateSite } from "./actions";
-import { useState } from "react";
+import { getSummary } from "../../actions";
 
 type Props = {
   conversations: Conversations | [];
@@ -68,7 +69,7 @@ export default withPageAuthRequired(function SiteDescription({
       const data = { site_id: site };
 
       setIsGeneratingSite(true);
-      await generateSite(data);
+      await getSummary(data);
       setIsGeneratingSite(false);
 
       reset();

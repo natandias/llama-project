@@ -14,6 +14,14 @@ def find_site(id):
     return json_util.json.loads(json_util.dumps(site, default=str))
 
 
+def update_site(id, data):
+    print('updating', data)
+    update_result = mongo.db.sites.update_one(
+        {"_id": ObjectId(id)},
+        {"$set": data},
+    )
+    return update_result
+
 def list_sites(filters={}):
     sites_from_db = mongo.db.sites.find(filters)
     sites = json_util.json.loads(json_util.dumps(sites_from_db, default=str))

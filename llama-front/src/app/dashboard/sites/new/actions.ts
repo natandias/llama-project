@@ -1,6 +1,6 @@
 "use server";
 import { revalidateTag } from "next/cache";
-import { CreateSiteParams } from "./types";
+import { CreateSiteParams, GenerateSummaryParams } from "./types";
 import CONSTANTS from "@/constants";
 
 export async function createSite(data: CreateSiteParams) {
@@ -25,3 +25,30 @@ export async function createSite(data: CreateSiteParams) {
     throw new Error(errorMessage);
   }
 }
+
+export async function getSummary(data: GenerateSummaryParams) {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/chat/${data.site_id}/extract`,
+      {
+        method: "POST",
+        body: JSON.stringify({}),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log("getSummary responseData", responseData);
+
+    if (!response.ok) throw responseData;
+    revalidateTag(CONSTANTS.GET_CHAT);
+    return responseData;
+  } catch (error: any) {
+    const errorMessage = "Failed to extract";
+    throw new Error(errorMessage);
+  }
+}
+
