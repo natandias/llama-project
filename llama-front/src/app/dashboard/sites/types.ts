@@ -5,6 +5,7 @@ export type Site = {
   secondaryColor: string;
   content: string | undefined;
   requirements: string | undefined;
+  step: string;
 };
 
 export type SitesData = Site[];

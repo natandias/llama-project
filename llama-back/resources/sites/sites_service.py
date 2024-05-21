@@ -31,6 +31,7 @@ def list_sites(filters={}):
             "name": site["name"],
             "primaryColor": site["primaryColor"],
             "secondaryColor": site["secondaryColor"],
+            "step": site["step"]
         }
         for site in sites
     ]
