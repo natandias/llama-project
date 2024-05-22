@@ -61,7 +61,7 @@ export default withPageAuthRequired(function RequirementsPage({
     <Loading />
   ) : (
     <form
-      className="flex flex-col mt-10 items-center gap-10 w-full h-full backdrop-blur-xl"
+      className="flex flex-col pt-10 items-center gap-10 w-full h-full backdrop-blur-xl"
       onSubmit={handleSubmit(onSubmit)}
     >
       {isSubmitModalOpen ? (

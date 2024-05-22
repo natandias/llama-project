@@ -86,7 +86,7 @@ export default withPageAuthRequired(function SiteDescription({
   return isGeneratingSite ? (
     <Loading />
   ) : (
-    <section className="flex mt-10">
+    <section className="flex pt-10">
       <form
         className={`flex flex-col gap-5 text-center p-2 min-w-1/4 items-center `}
         onSubmit={handleSubmit(onSubmit)}
