@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { Conversations, Inputs } from "./types";
 import { sendMessage, generateSite } from "./actions";
 import { getSummary } from "../../actions";
+import Loading from "@/components/dashboard/Loading";
 
 type Props = {
   conversations: Conversations | [];
@@ -83,16 +84,7 @@ export default withPageAuthRequired(function SiteDescription({
   };
 
   return isGeneratingSite ? (
-    <section className="flex flex-col items-center my-auto">
-      <h1 className="text-lg">Processando os dados... Aguarde um momento.</h1>
-      {/* <h2 className="text-lg">Por favor aguarde um momento</h2> */}
-      <div className="flex space-x-2 justify-center items-center bg-black h-10 dark:invert">
-        <span className="sr-only">Loading...</span>
-        <div className="h-4 w-4 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-        <div className="h-4 w-4 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-        <div className="h-4 w-4 bg-white rounded-full animate-bounce"></div>
-      </div>
-    </section>
+    <Loading />
   ) : (
     <section className="flex mt-10">
       <form

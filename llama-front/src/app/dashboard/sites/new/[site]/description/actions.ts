@@ -24,10 +24,10 @@ export async function sendMessage(data: Inputs) {
   }
 }
 
-export async function generateSite(data: CreateSiteReqParams) {
+export async function generateSite(siteId: string) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/code/${data.site_id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/code/${siteId}`,
       {
         method: "POST",
         body: JSON.stringify({}),
@@ -43,7 +43,7 @@ export async function generateSite(data: CreateSiteReqParams) {
     revalidateTag(CONSTANTS.GET_CHAT);
     return responseData;
   } catch (error: any) {
-    const errorMessage = "Failed to generate site";
+    const errorMessage = "Failed to generate site. Try again!";
     throw new Error(errorMessage);
   }
 }

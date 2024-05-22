@@ -60,7 +60,6 @@ class SitesUpdate(Resource):
             "content", type=str, help="Provide content", required=False, location="json")
         args = parser.parse_args(strict=True)
 
-        print('updated_site', args)
         updated_site = update_site(id, args)
 
         return {"success": True}, 201
