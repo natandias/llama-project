@@ -5,6 +5,7 @@ const CONSTANTS = {
   SITE_STEPS: {
     CHATTING: "chatting",
     EDITTING_REQUIREMENTS: "editting-requirements",
+    DONE: "done",
   },
 };
 

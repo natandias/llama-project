@@ -18,24 +18,28 @@ export default function Dashboard({ sites }: PageProps) {
     if (site) {
       if (site.step === CONSTANTS.SITE_STEPS.CHATTING)
         router.push(`/dashboard/sites/new/${id}/description`);
-      if (site.step === CONSTANTS.SITE_STEPS.EDITTING_REQUIREMENTS)
+      if (
+        site.step === CONSTANTS.SITE_STEPS.EDITTING_REQUIREMENTS ||
+        site.step === CONSTANTS.SITE_STEPS.DONE
+      )
         router.push(`/dashboard/sites/new/${id}/requirements`);
     }
   };
-    
 
   return (
     <section className="w-full flex flex-row flex-wrap gap-3 justify-center items-center">
-      <NewSiteCard onClick={addNewSite} />
       {sites &&
         sites.map(site => (
           <div key={site.id}>
             <ExistingSiteCard
-              title={site.name}
-              onClick={() => openSite(site.id)}
+              id={site.id}
+              name={site.name}
+              onEdit={() => openSite(site.id)}
+              siteStep={site.step}
             />
           </div>
         ))}
+      <NewSiteCard onClick={addNewSite} />
     </section>
   );
 }

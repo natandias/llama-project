@@ -47,26 +47,27 @@ export default withPageAuthRequired(function RequirementsPage({
       const siteId = site.toString();
       await updateSite(siteId, data);
       await generateSite(siteId);
-
-      router.push(`/dashboard/sites/new/${siteId}/view`);
     } catch (error: any) {
       const errorMessage = error?.message ?? "Failed to update site";
       toast.error(errorMessage);
+      return false;
     }
   };
 
   const toggleSubmitModal = () => setIsSubmitModalOpen(!isSubmitModalOpen);
 
+  const returnToHome = () => router.push("/dashboard/sites");
+
   return isSubmitting ? (
     <Loading />
   ) : (
     <form
-      className="flex flex-col pt-10 items-center gap-10 w-full h-full backdrop-blur-xl"
+      className="flex flex-col items-center gap-10 w-full h-full "
       onSubmit={handleSubmit(onSubmit)}
     >
-      {isSubmitModalOpen ? (
+      {!isSubmitSuccessful && isSubmitModalOpen ? (
         <dialog
-          className="flex flex-col items-center justify-around mx-4 md:mx-auto h-72 lg:h-80 mt-[25%] p-5 border border-black rounded-md text-center backdrop-blur-xl"
+          className="flex flex-col items-center justify-around relative mx-4 md:mx-auto h-72 lg:h-80 p-5 border border-black rounded-md text-center"
           open
         >
           <p className="font-semibold ">O seu site será gerado agora.</p>
@@ -91,7 +92,38 @@ export default withPageAuthRequired(function RequirementsPage({
             </button>
           </div>
         </dialog>
-      ) : (
+      ) : null}
+
+      {isSubmitSuccessful ? (
+        <dialog
+          className="flex flex-col items-center justify-around relative mx-4 md:mx-auto h-72 lg:h-80 mt-[15%] p-5 border border-black rounded-md text-center"
+          open
+        >
+          <p className="font-semibold ">Parabéns!</p>
+          <p>O seu site está pronto!</p>
+          <p>Deseja visualizá-lo agora?</p>
+
+          <div className="flex flex-wrap justify-center gap-5 mt-5 md:mt-10">
+            <button
+              className="bg-white hover:bg-yellow-500 transition-all duration-500 text-black font-semibold text-md p-3 px-8 rounded-md mt-auto "
+              type="button"
+              disabled={isSubmitting}
+              onClick={returnToHome}
+            >
+              Voltar para tela inicial
+            </button>
+            <a
+              className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 rounded-md mt-auto "
+              href={`${process.env.NEXT_PUBLIC_STATIC_URL}/${site}.html`}
+              target="_blank"
+            >
+              Ver site
+            </a>
+          </div>
+        </dialog>
+      ) : null}
+
+      {!isSubmitModalOpen && !isSubmitSuccessful ? (
         <>
           {" "}
           <p className="text-xl text-center">
@@ -108,7 +140,7 @@ export default withPageAuthRequired(function RequirementsPage({
                   message: "Requisitos não podem ser vazios",
                 },
               })}
-              className="min-w-1/2 min-h-[450px]"
+              className="min-w-1/2 min-h-[450px] border-2 border-gray-200 p-4"
             />
           </section>
           <section className="flex flex-col w-5/6">
@@ -122,11 +154,11 @@ export default withPageAuthRequired(function RequirementsPage({
                   message: "Conteúdo não pode ser vazio",
                 },
               })}
-              className="min-w-1/2 min-h-[450px]"
+              className="min-w-1/2 min-h-[450px] border-2 border-gray-200 p-4"
             />
           </section>
           <button
-            className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 rounded-md mt-auto mb-10"
+            className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 rounded-md mt-auto "
             type="button"
             disabled={isSubmitting}
             onClick={toggleSubmitModal}
@@ -134,7 +166,7 @@ export default withPageAuthRequired(function RequirementsPage({
             Gerar site
           </button>
         </>
-      )}
+      ) : null}
     </form>
   );
 });

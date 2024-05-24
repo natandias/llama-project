@@ -7,14 +7,14 @@ type props = {
 
 export default function Navbar({ toggleSidebar }: props) {
   return (
-    <nav className="flex flex-row w-screen m-0 h-20 bg-zinc-200 shadow-xl">
+    <nav className="flex flex-row w-screen m-0 h-20 bg-zinc-200 shadow-xl z-20 mb-10 md:mb-20">
       <button
         type="button"
-        className="ml-4 inline-flex items-center justify-center rounded-md px-2.5 text-gray-700"
+        className="ml-[19px] inline-flex items-center justify-center rounded-md px-2.5 text-gray-700 z-50 visible"
         onClick={toggleSidebar}
       >
         <span className="sr-only">Abrir menu</span>
-        <MenuOutlined className="text-xl" />
+        <MenuOutlined className="text-xl " />
       </button>
       <Image
         alt="Intelimaker Logo"

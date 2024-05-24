@@ -35,7 +35,7 @@ export default function RootLayout({
             <section className="flex flex-col justify-center items-center flex-wrap gap-5 w-72">
               <h1 className="text-lg">Produto</h1>
               <h1 className="text-lg">Quem somos</h1>
-              <p className="text-xl mt-10 ">Intellimaker - 2023</p>
+              <p className="text-xl mt-10 ">Intellimaker - Desde 2023</p>
             </section>
           </div>
         </div>

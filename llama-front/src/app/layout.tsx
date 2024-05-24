@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-br">
+    <html lang="pt-br" className="h-full w-full">
       <UserProvider>
         <body
           className={`${inter.className} flex min-h-screen flex-col items-center font-poppins bg-white overflow-x-hidden`}

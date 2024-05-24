@@ -1,5 +1,5 @@
 const Loading = () => (
-  <section className="flex flex-col items-center my-auto">
+  <section className="h-full flex flex-col items-center my-auto text-center justify-center">
     <h1 className="text-lg">Processando os dados... Aguarde um momento.</h1>
     {/* <h2 className="text-lg">Por favor aguarde um momento</h2> */}
     <div className="flex space-x-2 justify-center items-center bg-black h-10 dark:invert">

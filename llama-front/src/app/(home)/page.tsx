@@ -63,9 +63,12 @@ export default function Home() {
             início até o lançamento e além, estamos comprometidos em garantir o
             seu sucesso online.
           </p>
-          <button className="text-lg mb-10 bg-zinc-200 hover:bg-zinc-300 p-4 px-8 max-w-md m-auto rounded-md">
+          <a
+            className="text-lg mb-10 bg-zinc-200 hover:bg-zinc-300 p-4 px-8 max-w-md m-auto rounded-md"
+            href="mailto:natanerico@gmail.com"
+          >
             Falar conosco
-          </button>
+          </a>
           <Image
             src={"images/team_collaboration.svg"}
             alt="Uma cena composta por um quadro branco e um computador em cima de uma mesa, onde um homem e uma mulher analisam um gráfico no quadro e a outra mulher está sentada em cima da mesa ao lado, também observando o quadro"
