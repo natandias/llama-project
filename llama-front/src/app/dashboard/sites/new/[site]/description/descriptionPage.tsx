@@ -86,12 +86,12 @@ export default withPageAuthRequired(function SiteDescription({
   return isGeneratingSite ? (
     <Loading />
   ) : (
-    <section className="flex pt-10">
+    <section className="flex w-full justify-center h-mainSection">
       <form
-        className={`flex flex-col gap-5 text-center p-2 min-w-1/4 items-center `}
+        className={`flex flex-col gap-5 text-center p-2 min-w-1/4 items-center h-full`}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="flex flex-col gap-5 overflow-y-auto">
+        <div className="flex flex-col gap-5 overflow-y-auto h-4/5">
           {conversations.length ? (
             conversations.map((conv, index) => (
               <div
@@ -112,38 +112,40 @@ export default withPageAuthRequired(function SiteDescription({
             </h1>
           )}
         </div>
-        <div className="flex flex-col mt-auto w-full mb-10">
+
+        <div className="w-full flex border border-zinc-400 rounded-sm ">
           <textarea
             id="pages"
-            className="border border-b-0 border-zinc-400 p-2 min-h-[60px] resize-none"
+            className=" w-5/6 p-2 border-0 min-h-[60px] resize-none focus:ring-0 focus-visible:ring-0 outline-none"
             onKeyDown={handleKeyDown}
             {...register("prompt", {
               required: {
                 value: true,
-                message: "É preciso preencher o formulário acima",
+                message: "É preciso preencher o campo acima",
               },
             })}
           ></textarea>
+
           <button
             type="submit"
             disabled={!promptVal || isSubmitting}
-            className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 disabled:bg-zinc-200"
+            className="w-2/6 md:w-1/6 h-10 m-auto rounded-md mr-2 bg-primary hover:bg-primary_hover text-black font-semibold text-md disabled:bg-zinc-200"
           >
             Enviar
           </button>
-          {isSubmitting ? (
-            <span className="text-red-500 text-sm">Gerando resposta...</span>
-          ) : (
-            ""
-          )}
-          <span className="text-red-500 text-sm">{errors.prompt?.message}</span>
         </div>
+
+        {isSubmitting ? (
+          <span className="text-red-500 text-sm">Gerando resposta...</span>
+        ) : (
+          ""
+        )}
+        <span className="text-red-500 text-sm">{errors.prompt?.message}</span>
+
         <div>
-          <h1>
-            Quando tiver fornecido todos os requisitos, clique em Prosseguir.
-          </h1>
+          <h1 className="mb-2">Quando tiver fornecido todos os requisitos:</h1>
           <button
-            className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 rounded-md mt-auto mb-10"
+            className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 rounded-md mt-auto "
             type="button"
             disabled={isSubmitting}
             onClick={triggerGenerateSite}

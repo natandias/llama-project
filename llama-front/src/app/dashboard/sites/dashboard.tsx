@@ -19,7 +19,7 @@ export default function Dashboard({ sites }: PageProps) {
       if (site.step === CONSTANTS.SITE_STEPS.CHATTING)
         router.push(`/dashboard/sites/new/${id}/description`);
       if (
-        site.step === CONSTANTS.SITE_STEPS.EDITTING_REQUIREMENTS ||
+        site.step === CONSTANTS.SITE_STEPS.EDITING_REQUIREMENTS ||
         site.step === CONSTANTS.SITE_STEPS.DONE
       )
         router.push(`/dashboard/sites/new/${id}/requirements`);

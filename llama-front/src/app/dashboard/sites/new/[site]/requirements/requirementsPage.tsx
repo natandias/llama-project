@@ -62,7 +62,7 @@ export default withPageAuthRequired(function RequirementsPage({
     <Loading />
   ) : (
     <form
-      className="flex flex-col items-center gap-10 w-full h-full "
+      className="flex flex-col items-center gap-10 w-full h-full pb-8"
       onSubmit={handleSubmit(onSubmit)}
     >
       {!isSubmitSuccessful && isSubmitModalOpen ? (
@@ -125,8 +125,7 @@ export default withPageAuthRequired(function RequirementsPage({
 
       {!isSubmitModalOpen && !isSubmitSuccessful ? (
         <>
-          {" "}
-          <p className="text-xl text-center">
+          <p className="text-xl text-center leading-3">
             Abaixo você pode editar detalhes sobre o seu site
           </p>
           <section className="flex flex-col w-5/6">

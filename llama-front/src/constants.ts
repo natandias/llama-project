@@ -4,7 +4,7 @@ const CONSTANTS = {
   GET_SITE: "getSite",
   SITE_STEPS: {
     CHATTING: "chatting",
-    EDITTING_REQUIREMENTS: "editting-requirements",
+    EDITING_REQUIREMENTS: "editing-requirements",
     DONE: "done",
   },
 };

@@ -7,7 +7,7 @@ type props = {
 
 export default function Navbar({ toggleSidebar }: props) {
   return (
-    <nav className="flex flex-row w-screen m-0 h-20 bg-zinc-200 shadow-xl z-20 mb-10 md:mb-20">
+    <nav className="flex flex-row w-screen m-0 h-20 bg-zinc-200 shadow-xl z-20 mb-6">
       <button
         type="button"
         className="ml-[19px] inline-flex items-center justify-center rounded-md px-2.5 text-gray-700 z-50 visible"

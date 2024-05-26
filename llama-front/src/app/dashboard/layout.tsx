@@ -20,7 +20,7 @@ export default function DashboardLayout({
       <div className="flex flex-row w-full ">
         <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
         <div
-          className={`h-full flex justify-center w-full pb-10   ${
+          className={`h-full flex justify-center w-full ${
             isSidebarOpen
               ? "invisible md:visible md:ml-72"
               : "visible md:visible"
