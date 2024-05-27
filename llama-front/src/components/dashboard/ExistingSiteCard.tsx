@@ -5,12 +5,14 @@ type ExistingSiteCardProps = {
   name: string;
   siteStep: string;
   onEdit: () => void;
+  onDelete: () => void;
 };
 
 const ExistingSiteCard = ({
   id,
   name,
   onEdit,
+  onDelete,
   siteStep,
 }: ExistingSiteCardProps) => (
   <div className="flex flex-col gap-6 w-80 h-60 bg-gray-100 text-black border border-black rounded-md items-center justify-center">
@@ -20,15 +22,16 @@ const ExistingSiteCard = ({
         <button
           className="bg-red-300 hover:bg-red-500 rounded-md p-2 px-4"
           type="button"
+          onClick={onDelete}
         >
-          Delete
+          Excluir
         </button>
         <button
           className="bg-blue-300 hover:bg-blue-500 rounded-md p-2 px-4"
           type="button"
           onClick={onEdit}
         >
-          Edit
+          Editar
         </button>
       </div>
 
@@ -38,7 +41,7 @@ const ExistingSiteCard = ({
             className="bg-yellow-300 hover:bg-yellow-500 rounded-md p-2 px-4"
             type="button"
           >
-            Download
+            Baixar código
           </button>
 
           <a
@@ -46,7 +49,7 @@ const ExistingSiteCard = ({
             href={`${process.env.NEXT_PUBLIC_STATIC_URL}/${id}.html`}
             target="_blank"
           >
-            View
+            Visualizar
           </a>
         </div>
       ) : null}

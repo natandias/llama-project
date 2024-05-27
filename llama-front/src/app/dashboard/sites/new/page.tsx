@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { Inputs } from "./types";
 import { createSite } from "./actions";
+import Loading from "@/components/dashboard/Loading";
 
 type TextInputProps = {
   label: string;
@@ -76,16 +77,7 @@ export default withPageAuthRequired(function NewSite() {
   };
 
   return isSubmitting ? (
-    <section className="flex flex-col items-center my-auto">
-      <h1 className="text-lg">Processando os dados... Aguarde um momento.</h1>
-      {/* <h2 className="text-lg">Por favor aguarde um momento</h2> */}
-      <div className="flex space-x-2 justify-center items-center bg-black h-10 dark:invert">
-        <span className="sr-only">Loading...</span>
-        <div className="h-4 w-4 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-        <div className="h-4 w-4 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-        <div className="h-4 w-4 bg-white rounded-full animate-bounce"></div>
-      </div>
-    </section>
+    <Loading />
   ) : (
     <section className="flex mt-14">
       <form

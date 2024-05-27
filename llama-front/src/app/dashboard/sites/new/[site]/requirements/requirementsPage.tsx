@@ -10,6 +10,7 @@ import { generateSite } from "@/app/dashboard/sites/new/[site]/description/actio
 
 import { useParams, useRouter } from "next/navigation";
 import Loading from "@/components/dashboard/Loading";
+import Modal from "@/components/dashboard/Modal";
 
 type Props = {
   siteInfo: Site;
@@ -66,10 +67,7 @@ export default withPageAuthRequired(function RequirementsPage({
       onSubmit={handleSubmit(onSubmit)}
     >
       {!isSubmitSuccessful && isSubmitModalOpen ? (
-        <dialog
-          className="flex flex-col items-center justify-around relative mx-4 md:mx-auto h-72 lg:h-80 p-5 border border-black rounded-md text-center"
-          open
-        >
+        <Modal>
           <p className="font-semibold ">O seu site será gerado agora.</p>
           <p>Essa operação pode levar alguns minutos.</p>
           <p>É preciso manter a aba aberta enquanto o site é gerado.</p>
@@ -91,14 +89,11 @@ export default withPageAuthRequired(function RequirementsPage({
               Continuar
             </button>
           </div>
-        </dialog>
+        </Modal>
       ) : null}
 
       {isSubmitSuccessful ? (
-        <dialog
-          className="flex flex-col items-center justify-around relative mx-4 md:mx-auto h-72 lg:h-80 mt-[15%] p-5 border border-black rounded-md text-center"
-          open
-        >
+        <Modal>
           <p className="font-semibold ">Parabéns!</p>
           <p>O seu site está pronto!</p>
           <p>Deseja visualizá-lo agora?</p>
@@ -120,7 +115,7 @@ export default withPageAuthRequired(function RequirementsPage({
               Ver site
             </a>
           </div>
-        </dialog>
+        </Modal>
       ) : null}
 
       {!isSubmitModalOpen && !isSubmitSuccessful ? (

@@ -15,12 +15,18 @@ def find_site(id):
 
 
 def update_site(id, data):
-    print('updating', data)
     update_result = mongo.db.sites.update_one(
         {"_id": ObjectId(id)},
         {"$set": data},
     )
     return update_result
+
+
+def delete_site(id):
+    delete_site_result = mongo.db.sites.delete_one({"_id": ObjectId(id)})
+    delete_conversations_result = mongo.db.conversations.delete_one({
+                                                                    "site_id": id})
+    return delete_site_result
 
 def list_sites(filters={}):
     sites_from_db = mongo.db.sites.find(filters)

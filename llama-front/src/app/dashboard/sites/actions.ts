@@ -42,3 +42,24 @@ export async function updateSite(siteId: string, data: Inputs) {
   }
   return null;
 }
+
+export async function deleteSite(siteId: string) {
+  const { accessToken } = await getAccessToken({
+    refresh: false,
+  });
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/site/${siteId}`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    next: { tags: [CONSTANTS.GET_SITES, CONSTANTS.GET_SITE] },
+  });
+
+  if (res.status === 200) {
+    return true;
+  }
+  return null;
+}
+

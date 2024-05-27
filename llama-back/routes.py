@@ -14,8 +14,8 @@ def define_routes(api):
     api.add_resource(UserFind, "/api/user/<user_id>")
     api.add_resource(UserList, "/api/user/list")
     api.add_resource(SiteManager, "/api/site")
-    api.add_resource(SitesActions, "/api/site/<string:id>", methods=['GET'])
-    api.add_resource(SitesUpdate, "/api/site/<string:id>", methods=['PATCH'])
+    api.add_resource(SitesActions, "/api/site/<string:id>",
+                     methods=['GET', 'PATCH', 'DELETE'])
     api.add_resource(SitesList, "/api/site/list")
     api.add_resource(ConversationManager, "/api/chat")
     api.add_resource(ConversationFind, "/api/chat/<site_id>")

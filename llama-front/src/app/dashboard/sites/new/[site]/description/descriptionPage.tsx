@@ -5,8 +5,8 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { Conversations, Inputs } from "./types";
-import { sendMessage, generateSite } from "./actions";
-import { getSummary } from "../../actions";
+import { sendMessage } from "./actions";
+import { extractSiteSummary } from "../../actions";
 import Loading from "@/components/dashboard/Loading";
 
 type Props = {
@@ -30,7 +30,7 @@ export default withPageAuthRequired(function SiteDescription({
 }: Props) {
   const router = useRouter();
 
-  const [isGeneratingSite, setIsGeneratingSite] = useState(false);
+  const [isExtractingSiteSummary, setIsExtractingSiteSummary] = useState(false);
 
   const {
     register,
@@ -67,23 +67,23 @@ export default withPageAuthRequired(function SiteDescription({
     }
   };
 
-  const triggerGenerateSite = async () => {
+  const triggerSiteSummaryExtraction = async () => {
     try {
-      const data = { site_id: site };
+      const data = { site_id: site.toString() };
 
-      setIsGeneratingSite(true);
-      await getSummary(data);
-      setIsGeneratingSite(false);
+      setIsExtractingSiteSummary(true);
+      await extractSiteSummary(data);
+      setIsExtractingSiteSummary(false);
       reset();
       router.push(`/dashboard/sites/new/${site}/requirements`);
     } catch (error: any) {
       const errorMessage = error?.message ?? "Failed to generate site";
-      setIsGeneratingSite(false);
+      setIsExtractingSiteSummary(false);
       toast.error(errorMessage);
     }
   };
 
-  return isGeneratingSite ? (
+  return isExtractingSiteSummary ? (
     <Loading />
   ) : (
     <section className="flex w-full justify-center h-mainSection">
@@ -148,7 +148,7 @@ export default withPageAuthRequired(function SiteDescription({
             className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 rounded-md mt-auto "
             type="button"
             disabled={isSubmitting}
-            onClick={triggerGenerateSite}
+            onClick={triggerSiteSummaryExtraction}
           >
             Prosseguir
           </button>

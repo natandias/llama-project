@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask_restful import Resource, reqparse
-from resources.sites.sites_service import create_site, find_site, list_sites, update_site
+from resources.sites.sites_service import create_site, find_site, list_sites, update_site, delete_site
 import llama
 
 from validator import require_auth
@@ -24,6 +24,7 @@ class SiteManager(Resource):
             "name": args["name"],
             "primaryColor": args["primaryColor"],
             "secondaryColor": args["secondaryColor"],
+            "step": "chatting"
         }
 
         insert_site_id = create_site(site)
@@ -40,6 +41,22 @@ class SitesActions(Resource):
     def get(self, id):
         site = find_site(id)
         return {"success": True, "data": site}, 200
+
+    def patch(self, id):
+        parser = reqparse.RequestParser()
+        parser.add_argument("requirements", type=str,
+                            help="Provide requirements", required=False, location="json")
+        parser.add_argument(
+            "content", type=str, help="Provide content", required=False, location="json")
+        args = parser.parse_args(strict=True)
+
+        updated_site = update_site(id, args)
+
+        return {"success": True}, 201
+
+    def delete(self, id):
+        delete_site(id)
+        return {"success": True}, 200
 
 
 class SitesList(Resource):

@@ -1,6 +1,6 @@
 "use server";
 import { revalidateTag } from "next/cache";
-import { CreateSiteParams, GenerateSummaryParams } from "./types";
+import { CreateSiteParams, ExtractSummaryParams } from "./types";
 import CONSTANTS from "@/constants";
 
 export async function createSite(data: CreateSiteParams) {
@@ -24,7 +24,7 @@ export async function createSite(data: CreateSiteParams) {
   }
 }
 
-export async function getSummary(data: GenerateSummaryParams) {
+export async function extractSiteSummary(data: ExtractSummaryParams) {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/chat/${data.site_id}/extract`,

@@ -11,7 +11,7 @@ callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
 
 chat_llm = LlamaCpp(
     model_path=config["LLM_CHAT_MODEL_PATH"],
-    temperature=0.1,
+    temperature=0.5,
     n_ctx=8000,
     top_p=0.95,
     callback_manager=callback_manager,

@@ -14,6 +14,4 @@ export type CreateSiteParams = {
   secondaryColor: string;
 };
 
-export type GenerateSummaryParams = {
-  site_id: string;
-};
+export type ExtractSummaryParams = { site_id: string };
