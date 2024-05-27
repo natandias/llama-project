@@ -24,4 +24,4 @@ if __name__ == "__main__":
     print("Running...")
     app.config["MONGO_URI"] = config["MONGO_URI"]
     mongo.init_app(app)
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

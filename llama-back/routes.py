@@ -4,7 +4,7 @@ from resources.conversation.conversation_manager import (
     ConversationExtract
 )
 from resources.user.user_manager import UserManager, UserFind, UserList
-from resources.sites.sites_manager import SiteManager, SitesActions, SitesList, SitesUpdate
+from resources.sites.sites_manager import SiteManager, SitesActions, SitesList, SitesDownload
 
 from code_completion import CodeCompletion
 
@@ -16,6 +16,7 @@ def define_routes(api):
     api.add_resource(SiteManager, "/api/site")
     api.add_resource(SitesActions, "/api/site/<string:id>",
                      methods=['GET', 'PATCH', 'DELETE'])
+    api.add_resource(SitesDownload, "/api/site/<string:id>/download")
     api.add_resource(SitesList, "/api/site/list")
     api.add_resource(ConversationManager, "/api/chat")
     api.add_resource(ConversationFind, "/api/chat/<site_id>")

@@ -1,23 +1,23 @@
 "use client";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SitesData, Site } from "./types";
 import NewSiteCard from "@/components/dashboard/NewSiteCard";
 import ExistingSiteCard from "@/components/dashboard/ExistingSiteCard";
 import CONSTANTS from "@/constants";
-import { useState } from "react";
 import Modal from "@/components/dashboard/Modal";
 import { deleteSite } from "@/app/dashboard/sites/actions";
-import Loading from "@/components/dashboard/Loading";
 
 type PageProps = {
   sites: SitesData;
+  accessToken: string | undefined;
 };
 
-export default function Dashboard({ sites }: PageProps) {
+export default function Dashboard({ sites, accessToken }: PageProps) {
   const router = useRouter();
 
   const [siteToDelete, setSiteToDelete] = useState<Site | null>(null);
-  const [isDeletingSite, setIsDeletingSite] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const addNewSite = () => router.push("/dashboard/sites/new");
   const openSite = (id: string) => {
@@ -34,17 +34,61 @@ export default function Dashboard({ sites }: PageProps) {
   };
 
   const onDeleteSite = async (id: string) => {
-    setIsDeletingSite(true);
+    setIsLoading(true);
     await deleteSite(id);
     toggleDeleteModal(null);
-    setIsDeletingSite(false);
+    setIsLoading(false);
+  };
+
+  const onDownloadSite = async (id: string) => {
+    setIsLoading(true);
+    const site = sites.find(s => s.id === id);
+
+    if (!site) {
+      setIsLoading(false);
+      return null;
+    }
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/site/${id}/download`,
+      {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": "application/octet-stream",
+        },
+        next: { tags: [CONSTANTS.DOWNLOAD_SITE] },
+      }
+    );
+    const blob = await response.blob();
+
+    const data = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = data;
+    link.download = `${site.name}.html`;
+
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+      })
+    );
+
+    setTimeout(() => {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(data);
+      link.remove();
+    }, 100);
+
+    setIsLoading(false);
   };
 
   const toggleDeleteModal = (site: Site | null) => setSiteToDelete(site);
 
-  return isDeletingSite ? (
-    <Loading />
-  ) : (
+  return (
     <section className="w-full flex flex-row flex-wrap gap-3 justify-center items-center">
       {siteToDelete ? (
         <Modal>
@@ -55,17 +99,18 @@ export default function Dashboard({ sites }: PageProps) {
 
           <div className="flex flex-wrap justify-center gap-5 mt-5 md:mt-10">
             <button
-              className="bg-white hover:bg-red-500 transition-all duration-500 text-black font-semibold text-md p-3 px-8 rounded-md mt-auto "
+              className="bg-white hover:bg-red-500 transition-all duration-500 text-black disabled:text-gray-500 font-semibold text-md p-3 px-8 rounded-md mt-auto "
               type="button"
               onClick={() => toggleDeleteModal(null)}
+              disabled={isLoading}
             >
               Cancelar
             </button>
             <button
-              className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 rounded-md mt-auto "
+              className="bg-primary hover:bg-primary_hover text-black disabled:bg-gray-100 disabled:text-gray-500  font-semibold text-md p-3 px-8 rounded-md mt-auto "
               type="button"
               onClick={() => onDeleteSite(siteToDelete.id)}
-              disabled={isDeletingSite}
+              disabled={isLoading}
             >
               Confirmar
             </button>
@@ -79,9 +124,11 @@ export default function Dashboard({ sites }: PageProps) {
               <ExistingSiteCard
                 id={site.id}
                 name={site.name}
+                siteStep={site.step}
                 onEdit={() => openSite(site.id)}
                 onDelete={() => toggleDeleteModal(site)}
-                siteStep={site.step}
+                onDownload={() => onDownloadSite(site.id)}
+                isLoading={isLoading}
               />
             </div>
           ))

@@ -1,3 +1,4 @@
+from flask import send_file
 from bson.objectid import ObjectId
 from database import mongo
 from bson import json_util, _dict_to_bson
@@ -42,3 +43,13 @@ def list_sites(filters={}):
         for site in sites
     ]
     return json_util.json.loads(json_util.dumps(sites_list, default=str))
+
+
+def download_site(id):
+    site = find_site(id)
+    return send_file(
+        path_or_file=f'static/{id}.html',
+        mimetype="application/octet-stream",
+        as_attachment=True,
+        download_name=site["name"]
+    )

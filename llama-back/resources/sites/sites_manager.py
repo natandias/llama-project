@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask_restful import Resource, reqparse
-from resources.sites.sites_service import create_site, find_site, list_sites, update_site, delete_site
+from resources.sites.sites_service import create_site, find_site, list_sites, update_site, delete_site, download_site
 import llama
 
 from validator import require_auth
@@ -69,7 +69,6 @@ class SitesList(Resource):
 class SitesUpdate(Resource):
     @require_auth(None)
     def patch(self, id):
-        print('SitesList patch', id)
         parser = reqparse.RequestParser()
         parser.add_argument("requirements", type=str,
                             help="Provide requirements", required=False, location="json")
@@ -80,3 +79,9 @@ class SitesUpdate(Resource):
         updated_site = update_site(id, args)
 
         return {"success": True}, 201
+
+
+class SitesDownload(Resource):
+    @require_auth(None)
+    def get(self, id):
+        return download_site(id)

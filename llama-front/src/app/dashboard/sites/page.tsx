@@ -34,8 +34,12 @@ export default withPageAuthRequired(
       sites = sitesData;
     }
 
+    const { accessToken } = await getAccessToken({
+      refresh: false,
+    });
+
     // Forward fetched data to your Client Component
-    return <Dashboard sites={sites} />;
+    return <Dashboard sites={sites} accessToken={accessToken} />;
   },
   { returnTo: "/" }
 );

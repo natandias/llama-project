@@ -17,6 +17,8 @@ export async function createSite(data: CreateSiteParams) {
 
     if (!response.ok) throw responseData;
     revalidateTag(CONSTANTS.GET_SITES);
+    revalidateTag(CONSTANTS.GET_SITE);
+    revalidateTag(CONSTANTS.DOWNLOAD_SITE);
     return responseData;
   } catch (error: any) {
     const errorMessage = "Failed to create site";
@@ -41,6 +43,7 @@ export async function extractSiteSummary(data: ExtractSummaryParams) {
 
     if (!response.ok) throw responseData;
     revalidateTag(CONSTANTS.GET_CHAT);
+    revalidateTag(CONSTANTS.DOWNLOAD_SITE);
     return responseData;
   } catch (error: any) {
     const errorMessage = "Failed to extract";

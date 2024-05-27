@@ -41,6 +41,7 @@ export async function generateSite(siteId: string) {
 
     if (!response.ok) throw responseData;
     revalidateTag(CONSTANTS.GET_CHAT);
+    revalidateTag(CONSTANTS.DOWNLOAD_SITE);
     return responseData;
   } catch (error: any) {
     const errorMessage = "Failed to generate site. Try again!";
