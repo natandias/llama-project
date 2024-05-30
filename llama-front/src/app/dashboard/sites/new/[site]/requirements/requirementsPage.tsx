@@ -107,6 +107,7 @@ export default withPageAuthRequired(function RequirementsPage({
             >
               Voltar para tela inicial
             </button>
+
             <a
               className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 rounded-md mt-auto "
               href={`${process.env.NEXT_PUBLIC_STATIC_URL}/${site}.html`}
@@ -115,6 +116,13 @@ export default withPageAuthRequired(function RequirementsPage({
               Ver site
             </a>
           </div>
+          <button
+            className="bg-white hover:bg-red-500  text-black font-semibold text-sm p-3 px-8 rounded-md mt-auto "
+            type="submit"
+            disabled={isSubmitting}
+          >
+            Gerar novamente?
+          </button>
         </Modal>
       ) : null}
 

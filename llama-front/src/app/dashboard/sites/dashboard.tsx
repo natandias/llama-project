@@ -7,6 +7,7 @@ import ExistingSiteCard from "@/components/dashboard/ExistingSiteCard";
 import CONSTANTS from "@/constants";
 import Modal from "@/components/dashboard/Modal";
 import { deleteSite } from "@/app/dashboard/sites/actions";
+import { toast } from "react-toastify";
 
 type PageProps = {
   sites: SitesData;
@@ -35,7 +36,13 @@ export default function Dashboard({ sites, accessToken }: PageProps) {
 
   const onDeleteSite = async (id: string) => {
     setIsLoading(true);
-    await deleteSite(id);
+    const result = await deleteSite(id);
+    if (!result) {
+      setIsLoading(false);
+      toast.error("Não foi possível excluir o site. Tente novamente!");
+      return null;
+    }
+    toast.success("Sucesso!");
     toggleDeleteModal(null);
     setIsLoading(false);
   };
@@ -60,6 +67,14 @@ export default function Dashboard({ sites, accessToken }: PageProps) {
         next: { tags: [CONSTANTS.DOWNLOAD_SITE] },
       }
     );
+
+    if (response.status !== 200) {
+      setIsLoading(false);
+      toast.error("Não foi possível baixar o arquivo. Tente novamente!");
+      return null;
+    }
+
+    console.log("response", response);
     const blob = await response.blob();
 
     const data = window.URL.createObjectURL(blob);
@@ -83,6 +98,7 @@ export default function Dashboard({ sites, accessToken }: PageProps) {
       link.remove();
     }, 100);
 
+    toast.success("Sucesso!");
     setIsLoading(false);
   };
 

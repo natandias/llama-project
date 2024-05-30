@@ -1,15 +1,20 @@
 "use server";
 import { revalidateTag } from "next/cache";
+import { getAccessToken } from "@auth0/nextjs-auth0";
 import { CreateSiteParams, ExtractSummaryParams } from "./types";
 import CONSTANTS from "@/constants";
 
 export async function createSite(data: CreateSiteParams) {
   try {
+    const { accessToken } = await getAccessToken({
+      refresh: false,
+    });
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/site`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`,
       },
     });
 
@@ -28,6 +33,10 @@ export async function createSite(data: CreateSiteParams) {
 
 export async function extractSiteSummary(data: ExtractSummaryParams) {
   try {
+    const { accessToken } = await getAccessToken({
+      refresh: false,
+    });
+  
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/chat/${data.site_id}/extract`,
       {
@@ -35,6 +44,7 @@ export async function extractSiteSummary(data: ExtractSummaryParams) {
         body: JSON.stringify({}),
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
         },
       }
     );

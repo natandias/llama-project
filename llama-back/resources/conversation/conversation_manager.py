@@ -6,7 +6,7 @@ import asyncio
 
 
 class ConversationManager(Resource):
-    # @require_auth(None)
+    @require_auth(None)
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument(
@@ -42,7 +42,7 @@ class ConversationFind(Resource):
 
 
 class ConversationExtract(Resource):
-    # @require_auth(None)
+    @require_auth(None)
     def post(self, site_id):
-        result = asyncio.run(llama.generate_summary(site_id=site_id))
+        result = llama.generate_summary(site_id=site_id)
         return result, 201

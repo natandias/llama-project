@@ -27,7 +27,6 @@ export default function DashboardLayout({
           }`}
         >
           {children}
-          <ToastContainer />
         </div>
       </div>
     </section>

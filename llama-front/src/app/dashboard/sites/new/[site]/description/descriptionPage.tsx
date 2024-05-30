@@ -61,7 +61,7 @@ export default withPageAuthRequired(function SiteDescription({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     //it triggers by pressing the enter key
-    if (e.key === "Enter" || e.key === "NumpadEnter") {
+    if ((e.key === "Enter" || e.key === "NumpadEnter") && !e.shiftKey) {
       e.preventDefault();
       e.currentTarget.form?.requestSubmit();
     }
@@ -118,6 +118,7 @@ export default withPageAuthRequired(function SiteDescription({
             id="pages"
             className=" w-5/6 p-2 border-0 min-h-[60px] resize-none focus:ring-0 focus-visible:ring-0 outline-none"
             onKeyDown={handleKeyDown}
+            disabled={isSubmitting}
             {...register("prompt", {
               required: {
                 value: true,
@@ -131,21 +132,21 @@ export default withPageAuthRequired(function SiteDescription({
             disabled={!promptVal || isSubmitting}
             className="w-2/6 md:w-1/6 h-10 m-auto rounded-md mr-2 bg-primary hover:bg-primary_hover text-black font-semibold text-md disabled:bg-zinc-200"
           >
-            Enviar
+            {isSubmitting ? "Processando..." : "Enviar"}
           </button>
         </div>
 
-        {isSubmitting ? (
+        {/* {isSubmitting ? (
           <span className="text-red-500 text-sm">Gerando resposta...</span>
         ) : (
           ""
         )}
-        <span className="text-red-500 text-sm">{errors.prompt?.message}</span>
+        <span className="text-red-500 text-sm">{errors.prompt?.message}</span> */}
 
         <div>
           <h1 className="mb-2">Quando tiver fornecido todos os requisitos:</h1>
           <button
-            className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 rounded-md mt-auto "
+            className="bg-primary hover:bg-primary_hover disabled:bg-gray-100 disabled:text-gray-500 text-black font-semibold text-md p-3 px-8 rounded-md mt-auto "
             type="button"
             disabled={isSubmitting}
             onClick={triggerSiteSummaryExtraction}
