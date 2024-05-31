@@ -6,6 +6,7 @@ export type Site = {
   content: string | undefined;
   requirements: string | undefined;
   step: string;
+  template: null | string;
 };
 
 export type SitesData = Site[];

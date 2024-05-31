@@ -25,7 +25,7 @@ export default function RootLayout({
         <body
           className={`${inter.className} flex min-h-screen flex-col items-center font-poppins bg-white overflow-x-hidden`}
         >
-          <ToastContainer position="bottom-right" />
+          <ToastContainer position="top-right" pauseOnHover={false} />
           {children}
         </body>
       </UserProvider>

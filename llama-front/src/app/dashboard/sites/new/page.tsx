@@ -68,7 +68,7 @@ export default withPageAuthRequired(function NewSite() {
 
       const responseData = await createSite(data);
       const { site_id } = responseData.data;
-
+      toast.success("Sucesso!");
       router.push(`/dashboard/sites/new/${site_id}/description`);
     } catch (error: any) {
       const errorMessage = error?.message ?? "Failed to create site";

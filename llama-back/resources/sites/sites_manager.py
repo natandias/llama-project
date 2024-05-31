@@ -26,6 +26,7 @@ class SiteManager(Resource):
             "name": args["name"],
             "primaryColor": args["primaryColor"],
             "secondaryColor": args["secondaryColor"],
+            "template": None,
             "author": current_token.sub,
             "step": "chatting"
         }
@@ -52,6 +53,8 @@ class SitesActions(Resource):
                             help="Provide requirements", required=False, location="json")
         parser.add_argument(
             "content", type=str, help="Provide content", required=False, location="json")
+        parser.add_argument(
+            "template", type=str, help="Provide template", required=False, location="json")
         args = parser.parse_args(strict=True)
 
         updated_site = update_site(id, args)

@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { Inputs } from "./types";
 import { updateSite } from "@/app/dashboard/sites/actions";
 import { generateSite } from "@/app/dashboard/sites/new/[site]/description/actions";
+import Image from "next/image";
 
 import { useParams, useRouter } from "next/navigation";
 import Loading from "@/components/dashboard/Loading";
@@ -25,29 +26,34 @@ export default withPageAuthRequired(function RequirementsPage({
   const { site } = params;
 
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful, isSubmitting },
+    formState: { errors, isSubmitSuccessful, isSubmitting, isValid },
+    trigger,
   } = useForm<Inputs>({
     defaultValues: {
       content: siteInfo.content,
       requirements: siteInfo.requirements,
+      template: siteInfo.template,
     },
   });
 
   const onSubmit: SubmitHandler<Inputs> = async formValues => {
     try {
-      const { content, requirements } = formValues;
+      const { content, requirements, template } = formValues;
       const data = {
         content,
         requirements,
+        template,
       };
 
       const siteId = site.toString();
       await updateSite(siteId, data);
       await generateSite(siteId);
+      setIsSuccessModalOpen(true);
     } catch (error: any) {
       const errorMessage = error?.message ?? "Failed to update site";
       toast.error(errorMessage);
@@ -55,9 +61,33 @@ export default withPageAuthRequired(function RequirementsPage({
     }
   };
 
-  const toggleSubmitModal = () => setIsSubmitModalOpen(!isSubmitModalOpen);
+  const toggleSubmitModal = () =>
+    isValid ? setIsSubmitModalOpen(!isSubmitModalOpen) : trigger();
 
   const returnToHome = () => router.push("/dashboard/sites");
+
+  const templateOptions = [
+    {
+      id: "start_page",
+      label: "Template ideal para Landing Pages",
+      image: "start-page-template.png",
+    },
+    {
+      id: "architects",
+      label: "Template ideal para vitrine de projetos",
+      image: "architects.png",
+    },
+    {
+      id: "portifolio",
+      label: "Template ideal para portifólios",
+      image: "portifolio.png",
+    },
+    {
+      id: "store",
+      label: "Template ideal para lojas",
+      image: "store.png",
+    },
+  ];
 
   return isSubmitting ? (
     <Loading />
@@ -66,7 +96,7 @@ export default withPageAuthRequired(function RequirementsPage({
       className="flex flex-col items-center gap-10 w-full h-full pb-8"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {!isSubmitSuccessful && isSubmitModalOpen ? (
+      {!isSuccessModalOpen && isSubmitModalOpen ? (
         <Modal>
           <p className="font-semibold ">O seu site será gerado agora.</p>
           <p>Essa operação pode levar alguns minutos.</p>
@@ -92,7 +122,7 @@ export default withPageAuthRequired(function RequirementsPage({
         </Modal>
       ) : null}
 
-      {isSubmitSuccessful ? (
+      {isSuccessModalOpen ? (
         <Modal>
           <p className="font-semibold ">Parabéns!</p>
           <p>O seu site está pronto!</p>
@@ -126,7 +156,7 @@ export default withPageAuthRequired(function RequirementsPage({
         </Modal>
       ) : null}
 
-      {!isSubmitModalOpen && !isSubmitSuccessful ? (
+      {!isSubmitModalOpen && !isSuccessModalOpen ? (
         <>
           <p className="text-xl text-center leading-3">
             Abaixo você pode editar detalhes sobre o seu site
@@ -159,6 +189,42 @@ export default withPageAuthRequired(function RequirementsPage({
               className="min-w-1/2 min-h-[450px] border-2 border-gray-200 p-4"
             />
           </section>
+          <section className="flex flex-col w-5/6">
+            <p className="text-xl bold mb-4">Selecione um template:</p>
+            <div className="flex items-center flex-wrap">
+              {templateOptions.map(template => (
+                <div
+                  key={template.id}
+                  className="flex flex-wrap items-center mt-8"
+                >
+                  <input
+                    {...register("template", {
+                      required: {
+                        value: true,
+                        message: "É preciso selecionar um template",
+                      },
+                    })}
+                    type="radio"
+                    value={template.id}
+                    className="w-6 h-6 mr-2 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 cursor-pointer"
+                  />
+
+                  <div className="mt-2">
+                    <Image
+                      src={`/images/${template.image}`}
+                      alt={template.label}
+                      width={1100}
+                      height={900}
+                    />
+                    <label htmlFor={template.id}>{template.label}</label>
+                  </div>
+
+                  <br />
+                </div>
+              ))}
+            </div>
+          </section>
+          <p className="text-red-500 text-md ">{errors.template?.message}</p>
           <button
             className="bg-primary hover:bg-primary_hover text-black font-semibold text-md p-3 px-8 rounded-md mt-auto "
             type="button"
