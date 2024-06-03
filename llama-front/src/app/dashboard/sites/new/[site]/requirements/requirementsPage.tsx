@@ -1,15 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import Dropzone from "react-dropzone";
 import { Site } from "@/app/dashboard/sites/types";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { toast } from "react-toastify";
-import { Inputs } from "./types";
+import { Inputs, SubmitInputs } from "./types";
 import { updateSite } from "@/app/dashboard/sites/actions";
 import { generateSite } from "@/app/dashboard/sites/new/[site]/description/actions";
-import Image from "next/image";
-
-import { useParams, useRouter } from "next/navigation";
 import Loading from "@/components/dashboard/Loading";
 import Modal from "@/components/dashboard/Modal";
 
@@ -29,29 +29,55 @@ export default withPageAuthRequired(function RequirementsPage({
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors, isSubmitSuccessful, isSubmitting, isValid },
     trigger,
+    setValue,
+    watch,
   } = useForm<Inputs>({
     defaultValues: {
       content: siteInfo.content,
       requirements: siteInfo.requirements,
       template: siteInfo.template,
+      images: [],
     },
   });
 
-  const onSubmit: SubmitHandler<Inputs> = async formValues => {
+  const imagesFiles = watch("images");
+
+  const [imagesPreview, setImagesPreview] = useState<
+    (File & { preview: string })[] | undefined
+  >([]);
+
+  useEffect(() => {
+    if (imagesFiles) {
+      setImagesPreview(
+        imagesFiles?.map(file =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        )
+      );
+    }
+  }, [imagesFiles]);
+
+  const onSubmit: SubmitHandler<SubmitInputs> = async formValues => {
     try {
-      const { content, requirements, template } = formValues;
-      const data = {
-        content,
-        requirements,
-        template,
-      };
+      const { content, requirements, template, images } = formValues;
 
       const siteId = site.toString();
-      await updateSite(siteId, data);
+
+      const formData = new FormData();
+      formData.append("content", content);
+      formData.append("requirements", requirements);
+      formData.append("template", template);
+      images.forEach(img => formData.append("images", img));
+
+      const result = await updateSite(siteId, formData);
+      if (!result) throw new Error("Failed to update site");
+
       await generateSite(siteId);
       setIsSuccessModalOpen(true);
     } catch (error: any) {
@@ -66,6 +92,29 @@ export default withPageAuthRequired(function RequirementsPage({
 
   const returnToHome = () => router.push("/dashboard/sites");
 
+  const thumbs = imagesPreview?.map(file => (
+    <div key={file.name}>
+      <div>
+        <Image
+          src={file.preview}
+          alt={file.name}
+          width={200}
+          height={200}
+          onLoad={() => {
+            URL.revokeObjectURL(file.preview);
+          }}
+          onClick={() =>
+            setValue(
+              "images",
+              imagesFiles.filter(img => img.name !== file.name)
+            )
+          }
+          className="cursor-pointer"
+        ></Image>
+      </div>
+    </div>
+  ));
+
   const templateOptions = [
     {
       id: "start_page",
@@ -77,17 +126,41 @@ export default withPageAuthRequired(function RequirementsPage({
       label: "Template ideal para vitrine de projetos",
       image: "architects.png",
     },
-    {
-      id: "portifolio",
-      label: "Template ideal para portifólios",
-      image: "portifolio.png",
-    },
+    // {
+    //   id: "portifolio",
+    //   label: "Template ideal para portifólios",
+    //   image: "portifolio.png",
+    // },
     {
       id: "store",
       label: "Template ideal para lojas",
       image: "store.png",
     },
   ];
+
+  const baseStyle = {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "6em",
+    borderWidth: 2,
+    borderRadius: 2,
+    width: "100%",
+    borderColor: "#eeeeee",
+    borderStyle: "dashed",
+    backgroundColor: "#fafafa",
+    color: "#bdbdbd",
+    outline: "none",
+    transition: "border .24s ease-in-out",
+  };
+  const acceptStyle = {
+    borderWidth: 2,
+    borderColor: "#2196f3",
+  };
+  const rejectStyle = {
+    borderColor: "#ff1744",
+  };
 
   return isSubmitting ? (
     <Loading />
@@ -223,6 +296,64 @@ export default withPageAuthRequired(function RequirementsPage({
                 </div>
               ))}
             </div>
+          </section>
+          <section className="flex flex-col w-5/6">
+            <p className="text-xl bold mb-4">
+              Adicione fotos ao seu site (opcional):
+            </p>
+
+            <Controller
+              name="images"
+              control={control}
+              rules={{ required: false }}
+              render={({ field, field: { onChange } }) => (
+                <Dropzone
+                  {...field}
+                  onDrop={acceptedFiles => {
+                    onChange([...field.value, ...acceptedFiles]);
+                  }}
+                  onDropRejected={rejected => console.log("rejected", rejected)}
+                  accept={{
+                    "image/jpeg": [".jpeg", ".jpg"],
+                    "image/png": [".png"],
+                  }}
+                  maxFiles={6}
+                  maxSize={5242880}
+                  multiple
+                >
+                  {({
+                    getRootProps,
+                    getInputProps,
+                    isDragAccept,
+                    isDragReject,
+                  }) => (
+                    <section className="flex flex-col items-center ">
+                      <div
+                        {...getRootProps({
+                          style: {
+                            ...baseStyle,
+                            ...(isDragAccept ? acceptStyle : {}),
+                            ...(isDragReject ? rejectStyle : {}),
+                          },
+                        })}
+                      >
+                        <input {...getInputProps()} />
+                        <p className="text-center">
+                          Arraste fotos aqui ou clique para selecionar fotos do
+                          seu dispositivo (Máx: 6)
+                        </p>
+                        <p className="text-center">
+                          (Apenas imagens .jpeg, .jpg e .png serão aceitas)
+                        </p>
+                      </div>
+                      <aside className="flex flex-row flex-wrap gap-2 mt-4">
+                        {thumbs}
+                      </aside>
+                    </section>
+                  )}
+                </Dropzone>
+              )}
+            />
           </section>
           <p className="text-red-500 text-md ">{errors.template?.message}</p>
           <button

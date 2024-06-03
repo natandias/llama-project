@@ -10,6 +10,7 @@ from resources.sites.sites_service import find_site, update_site
 
 import setup
 from templates import templates
+import time
 
 config = dotenv_values(".env")
 
@@ -100,21 +101,26 @@ def generate_summary(site_id):
 
 
 async def create_site_code(site_id):
+    start_time = time.time()
     site_data = find_site(site_id)
     code_prompt_template = PromptTemplate.from_template(
         """[INST] {prompt} [/INST]"""
     )
 
-    code_prompt = f"""Write a complete code using HTML, CSS and Javascript to meet the following requirements: {site_data["requirements"]} and fill it with this content: {site_data["content"]}. Do not write additional commentaries. Feel free to use libs if they come from a CDN. The content of the website should be written in Portuguese from Brazil. Just generate the HTML without explanations.
+    site_images = ','.join(site_data["images"])
+
+    code_prompt = f"""Write a complete website using HTML, CSS and Javascript to meet the following requirements: {site_data["requirements"]} and fill it with this content: {site_data["content"]}. Use the following images links in the website: {site_images}. Do not write additional commentaries. Feel free to use libs if they come from a CDN. The content of the website should be written in Portuguese from Brazil. Just generate the HTML without explanations.
     Use this template: {templates.get(site_data["template"])}. Don't forget to replace the template colors. Be creative.
     """
 
     code_prompt_formatted = code_prompt_template.format(prompt=code_prompt)
 
+    print('code_prompt_formatted', code_prompt_formatted)
+
     llm = get_llm_instance()
 
     generated_html_result = llm(
-        code_prompt_formatted, max_tokens=None, temperature=1.5)
+        code_prompt_formatted, max_tokens=None, temperature=0.8)
     print(generated_html_result)
     formatted_html = generated_html_result["choices"][0]["text"]
 
@@ -126,6 +132,8 @@ async def create_site_code(site_id):
 
     update_site(site_id, data=dict(step='done'))
 
+    print("--- %s seconds ---" % (time.time() - start_time))
+
     return formatted_html
 
 
@@ -133,13 +141,6 @@ def chat(prompt, **kwargs):
     chat_llm = get_llm_instance()
 
     id = kwargs.get("id", None)
-
-    # chat_message_history = MongoDBChatMessageHistory(
-    #     session_id=id,
-    #     connection_string=config["MONGO_URI"],
-    #     database_name=config["DB_NAME"],
-    #     collection_name="chat_histories",
-    # )
 
     site = find_site(id)
     conversation = find_conversation(id)
@@ -182,9 +183,6 @@ def chat(prompt, **kwargs):
         [/INST] """
         summary_result = chat_llm(summary_prompt, max_tokens=3048)
         formatted_summary = summary_result["choices"][0]["text"]
-
-    # chat_message_history.add_user_message(prompt)
-    # chat_message_history.add_ai_message(formatted_result)
 
     save_conversation(
         id=id,

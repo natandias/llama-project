@@ -2,7 +2,10 @@
 import { getAccessToken } from "@auth0/nextjs-auth0";
 import { GetSiteReqReturnValue } from "./types";
 import CONSTANTS from "@/constants";
-import { Inputs } from "@/app/dashboard/sites/new/[site]/requirements/types";
+import {
+  Inputs,
+  UpdateFormData,
+} from "@/app/dashboard/sites/new/[site]/requirements/types";
 
 export async function getSite(siteId: string) {
   const { accessToken } = await getAccessToken({
@@ -22,7 +25,7 @@ export async function getSite(siteId: string) {
   return null;
 }
 
-export async function updateSite(siteId: string, data: Inputs) {
+export async function updateSite(siteId: string, formData: FormData) {
   const { accessToken } = await getAccessToken({
     refresh: false,
   });
@@ -30,10 +33,9 @@ export async function updateSite(siteId: string, data: Inputs) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/site/${siteId}`, {
     method: "PATCH",
     headers: {
-      "Authorization": `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
-    body: JSON.stringify(data),
+    body: formData,
   });
 
   if (res.status === 200) {
