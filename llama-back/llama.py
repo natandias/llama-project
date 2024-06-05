@@ -104,12 +104,12 @@ async def create_site_code(site_id):
     start_time = time.time()
     site_data = find_site(site_id)
     code_prompt_template = PromptTemplate.from_template(
-        """[INST] {prompt} [/INST]"""
+        """<s>[INST] You are a website developer. Do the following task:[/INST]</s>[INST] {prompt} [/INST]"""
     )
 
     site_images = ','.join(site_data["images"])
 
-    code_prompt = f"""Write a complete website using HTML, CSS and Javascript to meet the following requirements: {site_data["requirements"]} and fill it with this content: {site_data["content"]}. Use the following images links in the website: {site_images}. Do not write additional commentaries. Feel free to use libs if they come from a CDN. The content of the website should be written in Portuguese from Brazil. Just generate the HTML without explanations.
+    code_prompt = f"""Write a complete website using HTML, CSS and Javascript to meet the following requirements: {site_data["requirements"]} and fill it with this content: {site_data["content"]}. Insert the following images links in the website: {site_images}. Do not write additional commentaries. Feel free to use libs if they come from a CDN. The content of the website should be written in Portuguese from Brazil. Just generate the HTML without explanations.
     Use this template: {templates.get(site_data["template"])}. Don't forget to replace the template colors. Be creative.
     """
 
@@ -146,12 +146,15 @@ def chat(prompt, **kwargs):
     conversation = find_conversation(id)
 
     prompt_template = PromptTemplate.from_template(
-        """[INST] Você é um assistente de IA que sabe português. O seu nome é Intellimaker. Sua única tarefa é ajudar na coleta de requisitos para o desenvolvimento de um site estático.
-        Interaja de maneira a obter do cliente informações que serão necessárias para desenvolver um site estático. Você deve deixar bem claro que o site a ser desenvolvido é somente estático e não um sistema completo.
+        """<s>[INST] Você é um assistente de IA que sabe português. O seu nome é Intellimaker. Sua única tarefa é ajudar na coleta de requisitos para o desenvolvimento de um site estático.[/INST]</s>
+        [INST]Interaja de maneira a obter do cliente informações que serão necessárias para desenvolver um site estático. Você deve deixar bem claro que o site a ser desenvolvido é somente estático e não um sistema completo.
+        O site a ser desenvolvido não poderá ter funcionalidades complexas, como carrouséis ou vídeos. O template deve ser escolhido na próxima etapa.
         Considere que o cliente não possui noção de tecnologia. Não solicite muitas informações de uma só vez.
         As cores a serem usadas serão {primaryColor} e {secondaryColor}. Fotos poderão ser enviadas em uma próxima etapa.
-        Considere o seguinte contexto da conversa para responder a próxima questão: {history},
-         {question}[/INST]
+        Considere o seguinte contexto da conversa: {history} para responder a próxima questão:
+         {question}
+        Responda sempre em português.
+        [/INST]
     """
     )
 
