@@ -116,7 +116,7 @@ export default withPageAuthRequired(function SiteDescription({
         <div className="w-full flex border border-zinc-400 rounded-sm ">
           <textarea
             id="pages"
-            className=" w-5/6 p-2 border-0 min-h-[60px] resize-none focus:ring-0 focus-visible:ring-0 outline-none"
+            className=" w-5/6 p-2 border-0 min-h-[60px] resize focus:ring-0 focus-visible:ring-0 outline-none"
             onKeyDown={handleKeyDown}
             disabled={isSubmitting}
             {...register("prompt", {
